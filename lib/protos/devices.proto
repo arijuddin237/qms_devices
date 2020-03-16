@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package devices;
+
+// for config, we could potentially have one or more of an order's attributes to be used, so all these are "repeated"
+// tags and submodules are in their own config
+message OrderC {
+	repeated int64	ordersId = 1;
+	repeated string	tenantId = 2;
+	repeated string	sourceId = 3;
+	repeated string	sourceTrackingId = 4;
+	repeated string	sourceBatch = 5;
+	repeated string	pluId = 6;
+	repeated string	pluText = 7;
+	repeated float	qty = 8;
+	repeated string	status = 9;
+	repeated string	uuid = 10;
+	repeated uint32	version = 11;
+	repeated string	orderType = 12;
+	repeated string	parentUuid = 13;
+	repeated string	timestamp = 16;
+}
+
+// this is a single key:value tag; it's repeated later in the device config, if you need more than one tag to filter by
+message TagC {
+	string	name = 1;
+	string 	value = 2;
+	// NB: version is ignored in create requests
+	uint32	version = 3;
+}
+
+// this is a single key:value submodule; it's repeated later in the device config, if you need more than one submodule to filter by
+message SubmoduleC {
+	string modulename = 1;
+	string status = 2;
+	// NB: version is ignored in create requests
+	uint32 version = 3;
+}
+
+message DeviceConfig {
+	// action tells you the action:object:subject e.g. 'create:device:config', 'update:device:config'
+	string	action = 1;
+	// remember, an order config consists of repeated values of its attributes
+	OrderC	order = 2;
+	// a tag and a submodule, OTOH, are repated key:value pairs
+	repeated TagC	tag = 3;
+	repeated SubmoduleC	submodule = 4;
+	// a subscript is a set of unsigned ints; not sure if it should be signed?  to display reverse, we use the FIFO=False attribute below
+	repeated uint32	subscript = 5;
+	// fifo is the order of display for the display, either by oldest timestamp (FIFO) or reverse timestamp (LIFO)
+	bool	fifo = 6;
+	// timestamp of the device config as it was pushed to the stream (NOT the redis timestamp, but the timestamp in the device event history)
+	string	timestamp = 7;
+}
+
+message DeviceConfigResponse {
+	DeviceConfig	config = 1;	
+}
+
+message CreateDeviceConfigRequest {
+	string	deviceUuid = 1;
+	DeviceConfig	config = 2;
+}
+
+message GetDeviceConfigRequest {
+	string	deviceUuid = 1;
+}
+
+message StreamDeviceConfigRequest {
+	string	deviceUuid = 1;
+	string	lastindex = 2;
+}
+
+service Devices {
+	rpc createDeviceConfig(CreateDeviceConfigRequest) returns (DeviceConfigResponse) {};
+	rpc getDeviceConfig(GetDeviceConfigRequest) returns (DeviceConfigResponse) {};
+	rpc streamDeviceConfig(StreamDeviceConfigRequest) returns (stream DeviceConfigResponse) {};
+}
+

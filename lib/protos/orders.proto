@@ -1,0 +1,173 @@
+syntax = "proto3";
+
+package orders;
+
+message Tag {
+	string	name = 1;
+	string	value = 2;
+	// NB: version is ignored in create requests
+	uint32	version = 3;
+}
+
+message Tags {
+	repeated Tag	tag = 1;
+}
+
+message Order { 
+	int64	ordersId = 1;
+	string	tenantId = 2;
+	string	sourceId = 3;
+	string	sourceTrackingId = 4;
+	string	sourceBatch = 5;
+	string	pluId = 6;
+	string	pluText = 7;
+	float	qty = 8;
+	string	status = 9;
+	string	uuid = 10;
+	uint32	version = 11;
+	string	orderType = 12;
+	string	parentUuid = 13;
+	Tags	tags = 14;
+	Submodules	submodules = 15;
+	string	timestamp = 16;
+}
+
+message GetOrderRequest {
+	string	uuid = 1;
+}
+
+
+message CreateOrderResponse {
+	string	uuid = 1;
+}
+
+message GetTagRequest {
+	string	uuid = 1;
+	string	tagId = 2;
+}
+
+message GetTagResponse {
+	Tags	tags = 1;
+}
+
+message GetSubmoduleRequest {
+	string	uuid = 1;
+	string submodule = 2;
+}
+
+message GetSubmoduleResponse {
+	Submodules	submodules = 1;
+}
+
+message GetOrderWithRequest {
+	Order	order = 1;
+	Tags	tags = 2;
+	Submodules	submodules = 3;
+}
+
+message OrderHistory {
+	int64 eventsId = 1;
+	string	index = 2;
+	string 	uuid = 3;
+	string	json = 4;
+}
+
+message CreateUuidRequest {
+	string	sourceId = 1;
+}
+
+message CreateUuidResponse {
+	string	uuid = 1;
+}
+
+message StreamOrdersRequest {
+	string	subscriber = 1;
+	string	lastindex = 2;
+}
+
+message Submodule {
+	string modulename = 1;
+	string status = 2;
+	// NB: version is ignored in create requests
+	uint32 version = 3;
+}
+
+message Submodules {
+	repeated Submodule submodule = 1;
+}
+
+message StreamOrdersResponse {
+	string	action = 1;
+	Order	order = 2;
+	Tags	tags = 3;
+	Submodules	submodules = 4;
+	string	timestamp = 5;
+}
+
+message CreateTagRequest {
+	string uuid = 1;
+	Tag tag = 2;
+}
+
+message CreateTagResponse {
+	string uuid = 1;
+}
+
+message UpdateTagRequest {
+	string uuid = 1;
+	Tag tag = 2;
+}
+
+message UpdateTagResponse {
+	string uuid = 1;
+}
+
+
+message CreateSubmoduleRequest {
+	string uuid = 1;
+	Submodule submodule = 2;
+}
+
+message CreateSubmoduleResponse {
+	string uuid = 1;
+}
+
+message UpdateSubmoduleRequest {
+	string uuid = 1;
+	Submodule submodule = 2;
+}
+
+message UpdateSubmoduleResponse {
+	string uuid = 1;
+}
+
+message UpdateOrderStatusRequest {
+	string uuid = 1;
+	string status = 2;
+}
+
+message UpdateOrderStatusResponse {
+	string uuid = 1;
+}
+
+
+
+service Orders {
+	rpc createUuid(CreateUuidRequest) returns (CreateUuidResponse) {};
+	rpc createOrder(Order) returns (CreateOrderResponse) {};
+	rpc createTag(CreateTagRequest) returns (CreateTagResponse) {};
+	rpc createSubmodule(CreateSubmoduleRequest) returns (CreateSubmoduleResponse) {};
+
+	rpc getOrder(GetOrderRequest) returns (stream Order) {};
+	rpc getTag(GetTagRequest) returns (GetTagResponse) {};
+	rpc getSubmodule(GetSubmoduleRequest) returns (GetSubmoduleResponse) {};
+	rpc getOrderWith(GetOrderWithRequest) returns (stream Order) {};
+	rpc getOrderHistory(GetOrderRequest) returns (stream OrderHistory) {};
+
+	rpc updateOrderStatus(UpdateOrderStatusRequest) returns (UpdateOrderStatusResponse) {};
+	rpc updateTag(UpdateTagRequest) returns (UpdateTagResponse) {};
+	rpc updateSubmodule(UpdateSubmoduleRequest) returns (UpdateSubmoduleResponse) {};
+
+	rpc streamOrders(streamOrdersRequest) returns (stream StreamOrdersResponse) {};
+}
+
