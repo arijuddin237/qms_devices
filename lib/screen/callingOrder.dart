@@ -1,6 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:qms_device/bloc/blocDropDownSetting.dart';
 import 'package:qms_device/bloc/blocOrder.dart';
+import 'package:qms_device/library/libApps.dart';
 import 'package:qms_device/library/libSizeConfig.dart';
 import 'package:qms_device/service/orderService.dart';
 import 'package:qms_device/protos/orders.pb.dart';
@@ -34,6 +36,9 @@ class _CallingOrderState extends State<CallingOrder> {
                 stream: blocOrders.ordersCalling.stream,
                 builder: (context, snapshot){
                   if(snapshot.hasData && snapshot.data.length > 0){
+                    if(filterTenant.length > 0){
+                      snapshot.data.removeWhere((item) => item[0].tenantId != filterTenant);
+                    }
                     return HeaderCallingOrder(
                       ordersCalling: snapshot.data.first,
                     );
@@ -58,6 +63,9 @@ class _CallingOrderState extends State<CallingOrder> {
                           stream: blocOrders.ordersQueue.stream,
                           builder: (context, snapshot){
                             if(snapshot.hasData && snapshot.data.length > 0){
+                              if(filterTenant.length > 0){
+                                snapshot.data.removeWhere((item) => item[0].tenantId != filterTenant);
+                              }
                               return ListViewQueue(
                                 orders: snapshot.data,
                               );
@@ -85,6 +93,9 @@ class _CallingOrderState extends State<CallingOrder> {
                           stream: blocOrders.ordersCalling.stream,
                           builder: (context, snapshot){
                             if(snapshot.hasData && snapshot.data.length > 0){
+                              if(filterTenant.length > 0){
+                                snapshot.data.removeWhere((item) => item[0].tenantId != filterTenant);
+                              }
                               return ListViewQueue(
                                 orders: snapshot.data,
                                 calledQueue: true,
@@ -123,15 +134,40 @@ class _CallingOrderState extends State<CallingOrder> {
               Text('Tenant ID : ', style: TextStyle(
                 fontSize: 20
               )),
-              DropdownButton<String>(
-                items: ['testMerchant123', 'testMerchant124', 'testMerchant125'].map((value){
-                  return DropdownMenuItem(
-                    value: value,
-                    child: Text(value, style: TextStyle(fontSize: 20))
+              StreamBuilder<String>(
+                stream: blocDropdownSetting.subject.stream,
+                builder: (context, snapshot) {
+                  return DropdownButton<String>(
+                    value: snapshot.data,
+                    items: ['testMerchant123', 'testMerchant124', 'testMerchant125'].map((value){
+                      return DropdownMenuItem(
+                        value: value,
+                        child: Text(value, style: TextStyle(fontSize: 20))
+                      );
+                    }).toList(),
+                    onChanged: (newValue){
+                      blocDropdownSetting.changeValue(newValue);
+                      filterTenant = newValue;
+                      print(newValue); //-TODO: change to bloc so another widget can listening to onChanged
+                    },
                   );
-                }).toList(),
-                onChanged: (newValue){
-                  print(newValue); //-TODO: change to bloc so another widget can listening to onChanged
+                }
+              )
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              RaisedButton(
+                elevation: 0.0,
+                child: Text('Save', style: TextStyle(
+                  fontSize: 20
+                )),
+                onPressed: (){
+
                 },
               )
             ],
