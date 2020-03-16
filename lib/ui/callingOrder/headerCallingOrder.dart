@@ -18,7 +18,7 @@ class HeaderCallingOrder extends StatelessWidget {
         children: <Widget>[
           Container(
             height: SizeConfig.safeBlockVertical * 30,
-            width: SizeConfig.safeBlockHorizontal * 50,
+            width: SizeConfig.safeBlockHorizontal * 35,
             child: Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -57,6 +57,42 @@ class HeaderCallingOrder extends StatelessWidget {
           Row(
             children: <Widget>[
               Padding(
+                padding:  const EdgeInsets.only(
+                  left: 8.0,
+                  right: 8.0
+                ),
+                child: RaisedButton(
+                  color: Colors.white,
+                  elevation: 0.0,
+                  onPressed: (){
+                    OrderService().createUuid(
+                      sourceId: 'POS01'
+                    ).then((data){
+                      OrderService().createOrder(
+                        tenantId: 'testMerchant123',
+                        sourceId: 'POS01',
+                        uuId: data.uuid,
+                        sourceBatch: 'A05'
+                      );
+                    });
+                  },
+                  child: Container(
+                    height: SizeConfig.safeBlockVertical * 30,
+                    width: SizeConfig.safeBlockHorizontal * 15,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.add, size: 100),
+                        Text('New', style: TextStyle(
+                          fontSize: 60,
+                          fontWeight: FontWeight.bold
+                        ))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
                 padding: const EdgeInsets.only(
                   left: 8.0,
                   right: 8.0
@@ -78,7 +114,7 @@ class HeaderCallingOrder extends StatelessWidget {
                   },
                   child: Container(
                     height: SizeConfig.safeBlockVertical * 30,
-                    width: SizeConfig.safeBlockHorizontal * 18,
+                    width: SizeConfig.safeBlockHorizontal * 15,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[

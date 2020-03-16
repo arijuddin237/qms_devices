@@ -1,25 +1,9 @@
-/*
-  - paddingWidget = Create Padding for widget
-  - streamGetOrder = stream orders from GRPC and send data to BLoC
-  - streamOrderTenant = stream Orders from BLoC and filter by tenantId 
-    -> return buildCardTenant
-  - streamOrderReady = stream Orders from BLoC and filter by order status = ready 
-    -> return buildCardOrderReady
-  - streamOrderQueue = stream Orders from BLoC and filter by order status = new / pending / processing 
-    -> return buildCardOrderQueue
-  - buildCardTenant = build card for return of streamOrderTenant
-  - buildCardOrdersReady = build card for return of streamOrdersReady
-  - buildCardOrdersQueue = build card for return of streamOrdersQueue
-*/
-
 import 'package:flutter/material.dart';
-import 'package:marquee/marquee.dart';
 import 'package:qms_device/bloc/blocOrder.dart';
 import 'package:qms_device/library/libSizeConfig.dart';
 import 'package:qms_device/library/libApps.dart';
 import 'package:qms_device/protos/orders.pb.dart';
 import 'package:qms_device/service/orderService.dart';
-import 'package:qms_device/ui/marqueeWidget.dart';
 import 'package:qms_device/ui/nowServingContainer.dart';
 import 'package:qms_device/ui/scrollingText.dart';
 import 'package:qms_device/ui/tenantGridViewContainer.dart';
@@ -163,17 +147,7 @@ class _QmsTest3State extends State<QmsTest3> {
   Widget _buildCardOrdersReady(String sourceBatch, String tenantId){
     return Card(
       elevation: 0.0,
-      child: /*Container(
-        width: SizeConfig.safeBlockHorizontal * 45,
-        height: SizeConfig.safeBlockVertical * 50,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: AssetImage('$path/skinpack/gifAnimation.gif')
-          )
-        )
-      )*/
-      FutureBuilder(
+      child: FutureBuilder(
         future: TextureImage.textureContainer(
           path: '$path/skinpack/readyContainerColorBack.png',
           defaultImageAsset: 'assets/defaultContainerColor.png',
@@ -322,7 +296,7 @@ class _QmsTest3State extends State<QmsTest3> {
     return Scaffold(
       body: SafeArea(
         child: StreamBuilder(
-          stream: _service.streamOrder(),
+          stream: _service.streamGetOrder(),
           builder: (context, snapshot) {
             if(!snapshot.hasData){
               return Center(

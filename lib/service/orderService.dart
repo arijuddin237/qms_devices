@@ -90,7 +90,7 @@ class OrderService {
           ..sourceBatch = sourceBatch ?? ""
           ..pluId = pluId ?? ""
           ..pluText = pluText ?? ""
-          ..qty = qty ?? ""
+          ..qty = qty ?? 0.0
           ..status = status ?? ""
           ..uuid = uuId ?? ""
           ..orderType = orderType ?? ""

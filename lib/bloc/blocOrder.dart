@@ -59,10 +59,10 @@ class BlocOrders {
     _ordersCalling.sink.add(groupByTenant(_callings));
     /*_readys.removeWhere((item) => item.uuid == order.uuid);
     _callings.removeWhere((item) => item.uuid == order.uuid);*/
-    if(order.status == 'new' || order.status == 'pending' 
+    /*if(order.status == 'new' || order.status == 'pending' 
       || order.status == 'processing' || order.status == 'ready'
-    ){
-    //if(order.status != 'complete' || order.status != 'calling'){
+    ){*/
+    if(order.status != 'completed' && order.status != "calling" && order.status != 'complete'){
       _queues.add(order);
       _queues.sort((a, b){
         var aDate = a.timestamp;
