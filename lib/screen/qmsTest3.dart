@@ -38,7 +38,7 @@ class _QmsTest3State extends State<QmsTest3> {
             children: List.generate(8, (index){
               String _sourceBatch(){
                 if(index < snapshot.data.length){
-                  return snapshot.data[index][snapshot.data[index].length -1].sourceBatch;
+                  return snapshot.data[index].first.sourceBatch;
                 } else {
                   return null;
                 }
@@ -46,7 +46,7 @@ class _QmsTest3State extends State<QmsTest3> {
 
               String _tenantId(){
                 if(index < snapshot.data.length){
-                  return snapshot.data[index][snapshot.data[index].length -1].tenantId;
+                  return snapshot.data[index].first.tenantId;
                 } else {
                   return null;
                 }
@@ -68,7 +68,7 @@ class _QmsTest3State extends State<QmsTest3> {
         } else {
           String _sourceBatch(){
             if(snapshot.data.length > 0){
-              return snapshot.data[0][(snapshot.data[0].length) -1].sourceBatch;
+              return snapshot.data[0].first.sourceBatch;
             } else {
               return null;
             }
@@ -76,7 +76,7 @@ class _QmsTest3State extends State<QmsTest3> {
 
           String _tenantId(){
             if(snapshot.data.length > 0){
-              return snapshot.data[0][(snapshot.data[0].length) -1].tenantId;
+              return snapshot.data[0].first.tenantId;
             } else {
               return null;
             }
