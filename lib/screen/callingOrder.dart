@@ -32,20 +32,38 @@ class _CallingOrderState extends State<CallingOrder> {
         builder: (context, snapshot){
           return Column(
             children: <Widget>[
-              StreamBuilder<List<List<Order>>>(
-                stream: blocOrders.ordersCalling.stream,
-                builder: (context, snapshot){
-                  if(snapshot.hasData && snapshot.data.length > 0){
-                    if(filterTenant.length > 0){
-                      snapshot.data.removeWhere((item) => item[0].tenantId != filterTenant);
-                    }
-                    return HeaderCallingOrder(
-                      ordersCalling: snapshot.data.first,
-                    );
-                  } else {
-                    return HeaderCallingOrder();
-                  }
-                },
+              StreamBuilder<Object>(
+                stream: blocDropdownSetting.subject.stream,
+                builder: (context, snapshotDrop) {
+                  return Container(
+                    child: StreamBuilder<List<List<Order>>>(
+                      stream: blocOrders.ordersCalling.stream,
+                      builder: (context, snapshot){
+                        if(snapshot.hasData && snapshot.data.length > 0){
+                          List<List<Order>> calledList = List<List<Order>>();
+                          if(snapshotDrop.hasData){
+                            for (var groupTenant in snapshot.data) {
+                              List<Order> orders = List<Order>();
+                              for (var order in groupTenant) {
+                                if(order.tenantId == snapshotDrop.data){
+                                  orders.add(order);
+                                }
+                              }
+                              if(orders.length > 0){
+                                calledList.add(orders);
+                              }
+                            }
+                          }
+                          return HeaderCallingOrder(
+                            ordersCalling: (calledList.length > 0) ? calledList.first : null,
+                          );
+                        } else {
+                          return HeaderCallingOrder();
+                        }
+                      },
+                    ),
+                  );
+                }
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -56,24 +74,40 @@ class _CallingOrderState extends State<CallingOrder> {
                       Text('Queueing', style: TextStyle(
                           fontSize: 50,
                       )),
-                      Container(
-                        width: SizeConfig.safeBlockHorizontal * 49,
-                        height: SizeConfig.safeBlockVertical * 52,
-                        child: StreamBuilder<List<List<Order>>>(
-                          stream: blocOrders.ordersQueue.stream,
-                          builder: (context, snapshot){
-                            if(snapshot.hasData && snapshot.data.length > 0){
-                              if(filterTenant.length > 0){
-                                snapshot.data.removeWhere((item) => item[0].tenantId != filterTenant);
-                              }
-                              return ListViewQueue(
-                                orders: snapshot.data,
-                              );
-                            } else {
-                              return Container();
-                            }
-                          },
-                        ),
+                      StreamBuilder<Object>(
+                        stream: blocDropdownSetting.subject.stream,
+                        builder: (context, snapshotDrop) {
+                          return Container(
+                            width: SizeConfig.safeBlockHorizontal * 49,
+                            height: SizeConfig.safeBlockVertical * 52,
+                            child: StreamBuilder<List<List<Order>>>(
+                              stream: blocOrders.ordersQueue.stream,
+                              builder: (context, snapshot){
+                                if(snapshot.hasData && snapshot.data.length > 0){
+                                  List<List<Order>> queueList = List<List<Order>>();
+                                  if(snapshotDrop.hasData){
+                                    for (var groupTenant in snapshot.data) {
+                                      List<Order> orders = List<Order>();
+                                      for (var order in groupTenant) {
+                                        if(order.tenantId == snapshotDrop.data){
+                                          orders.add(order);
+                                        }
+                                      }
+                                      if(orders.length > 0){
+                                        queueList.add(orders);
+                                      }
+                                    }
+                                  }
+                                  return ListViewQueue(
+                                    orders: (queueList == null) ? snapshot.data : queueList
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              },
+                            ),
+                          );
+                        }
                       ),
                     ],
                   ),
@@ -85,26 +119,42 @@ class _CallingOrderState extends State<CallingOrder> {
                       Text('Called Queue', style: TextStyle(
                         fontSize: 50
                       )),
-                      Container(
-                        width: SizeConfig.safeBlockHorizontal * 49,
-                        height: SizeConfig.safeBlockVertical * 52,
-                        child: 
-                          StreamBuilder<List<List<Order>>>(
-                          stream: blocOrders.ordersCalling.stream,
-                          builder: (context, snapshot){
-                            if(snapshot.hasData && snapshot.data.length > 0){
-                              if(filterTenant.length > 0){
-                                snapshot.data.removeWhere((item) => item[0].tenantId != filterTenant);
-                              }
-                              return ListViewQueue(
-                                orders: snapshot.data,
-                                calledQueue: true,
-                              );
-                            } else {
-                              return Container();
-                            }
-                          },
-                        )
+                      StreamBuilder<Object>(
+                        stream: blocDropdownSetting.subject.stream,
+                        builder: (context, snapshotDrop) {
+                          return Container(
+                            width: SizeConfig.safeBlockHorizontal * 49,
+                            height: SizeConfig.safeBlockVertical * 52,
+                            child: 
+                              StreamBuilder<List<List<Order>>>(
+                              stream: blocOrders.ordersCalling.stream,
+                              builder: (context, snapshot){
+                                if(snapshot.hasData && snapshot.data.length > 0){
+                                  List<List<Order>> calledList = List<List<Order>>();
+                                  if(snapshotDrop.hasData){
+                                    for (var groupTenant in snapshot.data) {
+                                      List<Order> orders = List<Order>();
+                                      for (var order in groupTenant) {
+                                        if(order.tenantId == snapshotDrop.data){
+                                          orders.add(order);
+                                        }
+                                      }
+                                      if(orders.length > 0){
+                                        calledList.add(orders);
+                                      }
+                                    }
+                                  }
+                                  return ListViewQueue(
+                                    orders: (calledList == null) ? snapshot.data : calledList,
+                                    calledQueue: true,
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              },
+                            )
+                          );
+                        }
                       ),
                     ],
                   ),
@@ -148,7 +198,7 @@ class _CallingOrderState extends State<CallingOrder> {
                     onChanged: (newValue){
                       blocDropdownSetting.changeValue(newValue);
                       filterTenant = newValue;
-                      print(newValue); //-TODO: change to bloc so another widget can listening to onChanged
+                      //print(newValue); //-TODO: change to bloc so another widget can listening to onChanged
                     },
                   );
                 }
@@ -171,6 +221,19 @@ class _CallingOrderState extends State<CallingOrder> {
                 },
               )
             ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: StreamBuilder<String>(
+            stream: blocDropdownSetting.subject.stream,
+            builder: (context, snapshot){
+              if(snapshot.hasData){
+                return Text(snapshot.data);
+              } else {
+                return Container();
+              }
+            },
           ),
         )
       ],
