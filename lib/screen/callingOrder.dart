@@ -223,19 +223,6 @@ class _CallingOrderState extends State<CallingOrder> {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: StreamBuilder<String>(
-            stream: blocDropdownSetting.subject.stream,
-            builder: (context, snapshot){
-              if(snapshot.hasData){
-                return Text(snapshot.data);
-              } else {
-                return Container();
-              }
-            },
-          ),
-        )
       ],
     );
   }
