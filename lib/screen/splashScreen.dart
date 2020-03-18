@@ -30,17 +30,23 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _setQmsType() async {
     DatabaseHelper().getSetting().then((data){
+      orderProxyHost = data.host;
+      orderProxyPort = data.ordersPort;
       blocSetting.changeSetting(
         Setting(
-          qmsType: data.qmsType
+          qmsType: data.qmsType,
+          host: data.host,
+          ordersPort: data.ordersPort,
+          devicesPort: data.devicesPort,
+          tenantId: data.tenantId
         )
       );
+      OrderService().initialize();
     });
   }
 
   @override
   void initState() {
-    OrderService().initialize();
     super.initState();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,

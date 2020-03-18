@@ -5,6 +5,7 @@ import 'package:qms_device/model/setting.dart';
 class BlocSetting {
   final DatabaseHelper _db = DatabaseHelper();
   BehaviorSubject<Setting> _subject = BehaviorSubject<Setting>();
+  ValueStream get getSettings => _subject.stream;
 
   BehaviorSubject<Setting> get subject => _subject;
 

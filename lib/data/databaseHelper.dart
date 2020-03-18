@@ -9,7 +9,6 @@ import 'package:qms_device/model/skinPack.dart';
 import 'package:qms_device/model/setting.dart';
 import 'package:qms_device/model/tenant.dart';
 import 'package:qms_device/protos/orders.pb.dart';
-//import 'package:qms_device/model/order.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper.internal();
@@ -54,7 +53,8 @@ class DatabaseHelper {
     );
 
     await db.execute(
-      "CREATE TABLE setting(id INTEGER, qmsType TEXT)"
+      "CREATE TABLE setting(id INTEGER, qmsType TEXT, host TEXT," 
+      "ordersPort INTEGER, devicesPort INTEGER, tenantID TEXT)"
     );
 
     await db.execute(
@@ -66,7 +66,7 @@ class DatabaseHelper {
     );
 
     await db.execute(
-      "INSERT INTO setting VALUES('1','Multi Tenant')"
+      "INSERT INTO setting VALUES('1','Multi Tenant','192.168.0.223','50051','50053','')"
     );
     
     print("Table Created");
@@ -335,10 +335,14 @@ class DatabaseHelper {
     var dbClient = await db;
     List<Map> list = await dbClient.rawQuery('select * from setting');
     List<Setting> settings = List();
-    for (var qmsType in list) {
+    for (var setting in list) {
       settings.add(
         Setting(
-          qmsType: qmsType['qmsType']
+          qmsType: setting['qmsType'],
+          host: setting['host'],
+          ordersPort: setting['ordersPort'],
+          devicesPort: setting['devicesPort'],
+          tenantId: setting['tenantID']
         )
       );
     }
@@ -377,7 +381,9 @@ class DatabaseHelper {
   Future<int> updateSetting(Setting setting) async {
     var dbClient = await db;
     int res = await dbClient.rawUpdate(
-      "UPDATE setting SET qmsType = '${setting.qmsType}'"
+      "UPDATE setting SET qmsType = '${setting.qmsType}',"
+      "host = '${setting.host}', ordersPort = '${setting.ordersPort}',"
+      "devicesPort = '${setting.devicesPort}', tenantID = '${setting.tenantId}'"
       "WHERE id = ${setting.id}"
     );
     return res;

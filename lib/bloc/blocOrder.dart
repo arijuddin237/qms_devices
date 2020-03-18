@@ -93,6 +93,8 @@ class BlocOrders {
     _queues.clear();
     _readys.clear();
     _callings.clear();
+    _ordersQueue.sink.add(null);
+    _ordersCalling.sink.add(null);
   }
 
   void saveOrder({Order order}) async {

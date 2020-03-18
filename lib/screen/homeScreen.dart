@@ -24,7 +24,9 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (BuildContext context){
         return AlertDialog(
-          title: Text('Input Password'),
+          title: Text('Input Password', style: TextStyle(
+            fontSize: 30
+          )),
           content: Container(
             child: Form(
               key: _formKey,
@@ -49,7 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Process'),
+              child: Text('Process', style: TextStyle(
+                fontSize: 20
+              )),
               onPressed: (){
                 if(_formKey.currentState.validate()){
                   Navigator.pop(context);
@@ -82,8 +86,8 @@ class _HomeScreenState extends State<HomeScreen> {
       body: StreamBuilder<Setting>(
         stream: blocSetting.subject.stream,
         builder: (context, snapshot) {
-          if(snapshot.hasData){
-            qmsType = snapshot.data.qmsType;
+          if(!snapshot.hasData){
+            return Container();            
           }
           return SafeArea(
             child: GridView.count(
@@ -108,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   onTap: (){
-                    if(qmsType == 'Multi Tenant'){
+                    if(snapshot.data.qmsType == 'Multi Tenant'){
                       Navigator.push(context, MaterialPageRoute(
                         builder: (context) => QmsTest3()
                       ));
@@ -121,26 +125,48 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 InkWell(
                   child: Container(
-                    color: Colors.blueAccent,
+                    color: (snapshot.data.tenantId != null && snapshot.data.tenantId.length > 0) 
+                      ? Colors.blueAccent 
+                      : Colors.grey,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
-                        //mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Icon(Icons.list, size: 120,),
                           Text('Calling Order', style: TextStyle(
-                            fontSize: 100
+                            fontSize: 80
                           ))
                         ],
                       ),
                     ),
                   ),
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => CallingOrder()
-                    ));
+                    (snapshot.data.tenantId != null && snapshot.data.tenantId.length > 0) 
+                      ? Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => CallingOrder()
+                      ))
+                      : showDialog(
+                        context: context,
+                        builder: (BuildContext context){
+                          return AlertDialog(
+                            content: Text('Please Insert Tenant ID at Menu Settings',
+                              style: TextStyle(fontSize: 30),
+                            ),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text('Close', style: TextStyle(
+                                  fontSize: 20
+                                )),
+                                onPressed: (){
+                                  Navigator.pop(context);
+                                },
+                              )
+                            ],
+                          );
+                        }
+                      );
                   },
                 ),
                 InkWell(

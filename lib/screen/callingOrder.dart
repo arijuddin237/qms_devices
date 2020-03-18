@@ -2,8 +2,10 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:qms_device/bloc/blocDropDownSetting.dart';
 import 'package:qms_device/bloc/blocOrder.dart';
+import 'package:qms_device/bloc/blocSetting.dart';
 import 'package:qms_device/library/libApps.dart';
 import 'package:qms_device/library/libSizeConfig.dart';
+import 'package:qms_device/model/setting.dart';
 import 'package:qms_device/service/orderService.dart';
 import 'package:qms_device/protos/orders.pb.dart';
 import 'package:qms_device/ui/callingOrder/headerCallingOrder.dart';
@@ -32,20 +34,20 @@ class _CallingOrderState extends State<CallingOrder> {
         builder: (context, snapshot){
           return Column(
             children: <Widget>[
-              StreamBuilder<Object>(
-                stream: blocDropdownSetting.subject.stream,
-                builder: (context, snapshotDrop) {
+              StreamBuilder<Setting>(
+                stream: blocSetting.subject.stream,
+                builder: (context, snapshotSetting) {
                   return Container(
                     child: StreamBuilder<List<List<Order>>>(
                       stream: blocOrders.ordersCalling.stream,
                       builder: (context, snapshot){
                         if(snapshot.hasData && snapshot.data.length > 0){
                           List<List<Order>> calledList = List<List<Order>>();
-                          if(snapshotDrop.hasData){
+                          if(snapshotSetting.hasData){
                             for (var groupTenant in snapshot.data) {
                               List<Order> orders = List<Order>();
                               for (var order in groupTenant) {
-                                if(order.tenantId == snapshotDrop.data){
+                                if(order.tenantId == snapshotSetting.data.tenantId){
                                   orders.add(order);
                                 }
                               }
@@ -74,9 +76,9 @@ class _CallingOrderState extends State<CallingOrder> {
                       Text('Queueing', style: TextStyle(
                           fontSize: 50,
                       )),
-                      StreamBuilder<Object>(
-                        stream: blocDropdownSetting.subject.stream,
-                        builder: (context, snapshotDrop) {
+                      StreamBuilder<Setting>(
+                        stream: blocSetting.subject.stream,
+                        builder: (context, snapshotSetting) {
                           return Container(
                             width: SizeConfig.safeBlockHorizontal * 49,
                             height: SizeConfig.safeBlockVertical * 52,
@@ -85,11 +87,11 @@ class _CallingOrderState extends State<CallingOrder> {
                               builder: (context, snapshot){
                                 if(snapshot.hasData && snapshot.data.length > 0){
                                   List<List<Order>> queueList = List<List<Order>>();
-                                  if(snapshotDrop.hasData){
+                                  if(snapshotSetting.hasData){
                                     for (var groupTenant in snapshot.data) {
                                       List<Order> orders = List<Order>();
                                       for (var order in groupTenant) {
-                                        if(order.tenantId == snapshotDrop.data){
+                                        if(order.tenantId == snapshotSetting.data.tenantId){
                                           orders.add(order);
                                         }
                                       }
@@ -119,9 +121,9 @@ class _CallingOrderState extends State<CallingOrder> {
                       Text('Called Queue', style: TextStyle(
                         fontSize: 50
                       )),
-                      StreamBuilder<Object>(
-                        stream: blocDropdownSetting.subject.stream,
-                        builder: (context, snapshotDrop) {
+                      StreamBuilder<Setting>(
+                        stream: blocSetting.subject.stream,
+                        builder: (context, snapshotSetting) {
                           return Container(
                             width: SizeConfig.safeBlockHorizontal * 49,
                             height: SizeConfig.safeBlockVertical * 52,
@@ -131,11 +133,11 @@ class _CallingOrderState extends State<CallingOrder> {
                               builder: (context, snapshot){
                                 if(snapshot.hasData && snapshot.data.length > 0){
                                   List<List<Order>> calledList = List<List<Order>>();
-                                  if(snapshotDrop.hasData){
+                                  if(snapshotSetting.hasData){
                                     for (var groupTenant in snapshot.data) {
                                       List<Order> orders = List<Order>();
                                       for (var order in groupTenant) {
-                                        if(order.tenantId == snapshotDrop.data){
+                                        if(order.tenantId == snapshotSetting.data.tenantId){
                                           orders.add(order);
                                         }
                                       }

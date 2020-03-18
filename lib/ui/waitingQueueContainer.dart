@@ -67,6 +67,7 @@ class WaitingQueueContainer extends StatelessWidget {
                   var _sourceBatch = _mapSourceBatch.values.toList();
                   return ListView.builder(
                     shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: _sourceBatch.length,
                     itemBuilder: (context, index2){
                       return ListTile(

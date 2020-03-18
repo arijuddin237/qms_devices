@@ -7,12 +7,17 @@ import 'package:flutter/services.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+import 'package:qms_device/bloc/blocDropDownSetting.dart';
+import 'package:qms_device/bloc/blocOrder.dart';
 import 'package:qms_device/bloc/blocSetting.dart';
 import 'package:qms_device/data/databaseHelper.dart';
+import 'package:qms_device/library/libGrpc.dart';
 import 'package:qms_device/library/libSizeConfig.dart';
 import 'package:qms_device/model/setting.dart';
 import 'package:qms_device/library/libApps.dart';
 import 'package:qms_device/model/skinPack.dart';
+import 'package:qms_device/protos/orders.pb.dart';
+import 'package:qms_device/service/orderService.dart';
 
 
 class SettingScreen extends StatefulWidget {
@@ -21,11 +26,20 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
+  final _formKeyProxyHost = GlobalKey<FormState>();
+  final _formKeyOrdersProxyPort = GlobalKey<FormState>();
+  final _formKeyDevicesProxyPort = GlobalKey<FormState>();
+  final _formKeyInputTenantId = GlobalKey<FormState>();
+
   DatabaseHelper _db = DatabaseHelper();
   io.File _skinPackFile;
   io.File _skinPackSingleTenant;
   TextEditingController _cntrlZipFile = TextEditingController();
   TextEditingController _cntrlSkinpackSingleTenant = TextEditingController();
+  TextEditingController _cntrlProxyHost = TextEditingController();
+  TextEditingController _cntrlOrderProxyPort = TextEditingController();
+  TextEditingController _cntrlDeviceProxyPort = TextEditingController();
+  TextEditingController _cntrlTenantId = TextEditingController();
   String _dropdownValue;
 
   Future _openFileExplorer() async {
@@ -45,15 +59,24 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   Future _deleteImage() async{ //-TODO: jumat : Kembali lagi ke cara ini
+    orderProxyHost = _cntrlProxyHost.text;
+    orderProxyPort = int.parse(_cntrlOrderProxyPort.text);
     blocSetting.changeSetting(
       Setting(
-        qmsType: _dropdownValue
+        qmsType: _dropdownValue,
+        host: _cntrlProxyHost.text,
+        ordersPort: int.parse(_cntrlOrderProxyPort.text),
+        tenantId: _cntrlTenantId.text
       )
     );
     await _db.updateSetting(
       Setting(
         id: 1,
-        qmsType: _dropdownValue
+        qmsType: _dropdownValue,
+        host: _cntrlProxyHost.text,
+        ordersPort: int.parse(_cntrlOrderProxyPort.text),
+        devicesPort: 0,
+        tenantId: _cntrlTenantId.text
       )
     );
     if(_skinPackFile != null){
@@ -125,7 +148,7 @@ class _SettingScreenState extends State<SettingScreen> {
         )),
         Container(
           width: SizeConfig.safeBlockHorizontal * 35,
-          height: SizeConfig.safeBlockVertical * 5,
+          height: SizeConfig.safeBlockVertical * 8,
           child: TextField(
             readOnly: true,
             controller: _cntrlZipFile,
@@ -159,7 +182,7 @@ class _SettingScreenState extends State<SettingScreen> {
         )),
         Container(
           width: SizeConfig.safeBlockHorizontal * 35,
-          height: SizeConfig.safeBlockVertical * 5,
+          height: SizeConfig.safeBlockVertical * 8,
           child: InkWell(
             child: TextField(
               readOnly: true,
@@ -203,7 +226,7 @@ class _SettingScreenState extends State<SettingScreen> {
         )),
         Container(
           width: SizeConfig.safeBlockHorizontal * 35,
-          height: SizeConfig.safeBlockVertical * 5,
+          height: SizeConfig.safeBlockVertical * 8,
           child: DropdownButton<String>(
             value: _dropdownValue,
             onChanged: (String newValue){
@@ -232,12 +255,153 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
+  /*Widget rowDropdownSelectTenant(){
+        return Container(
+          child: StreamBuilder<List<List<Order>>>(
+            stream: blocOrders.ordersQueue.stream,
+            builder: (context, snapshotOrder){
+              if(!snapshotOrder.hasData){
+                return Container();
+              }
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text('Select Tenant ID', style: TextStyle(
+                    fontSize: 20
+                  )),
+                  Container(
+                    width: SizeConfig.safeBlockHorizontal * 35,
+                    height: SizeConfig.safeBlockVertical * 5,
+                    child: StreamBuilder<List<Order>>(
+                      stream: blocDropdownSetting.getTenants.stream,
+                      builder: (context, snapshotDrop){
+                        return DropdownButton<List<Order>>(
+                          value: snapshotDrop.data,
+                          items: snapshotOrder.data.map((value){
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Container(
+                                width: SizeConfig.safeBlockHorizontal * 33,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(value[0].tenantId, style:TextStyle(
+                                    fontSize: 16
+                                  )),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (newValue){
+                            blocDropdownSetting.changeValueDropdown(newValue);
+                          },
+                        );
+                      },
+                    ),
+                  )
+                ],
+              );
+            },
+          ),
+        );
+  }*/
+
+  Widget rowInputTenantId(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text('Tenant ID', style: TextStyle(
+          fontSize: 20
+        )),
+        Form(
+          key: _formKeyInputTenantId,
+          child: Container(
+            width: SizeConfig.safeBlockHorizontal * 35,
+            height: SizeConfig.safeBlockVertical * 8,
+            child: TextFormField(
+              controller: _cntrlTenantId,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Tenant ID'
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget rowInputProxyHost(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text('Proxy Host', style: TextStyle(
+          fontSize: 20
+        )),
+        Form(
+          key: _formKeyProxyHost,
+          child: Container(
+            width: SizeConfig.safeBlockHorizontal * 35,
+            height: SizeConfig.safeBlockVertical * 8,
+            child: TextFormField(
+              controller: _cntrlProxyHost,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Proxy Host'
+              ),
+              validator: (value){
+                if(value.length == 0){
+                  return 'Empty Proxy Host';
+                }
+                return null;
+              },
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget rowInputOrderProxyPort(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text('Orders Proxy Port', style: TextStyle(
+          fontSize: 20
+        )),
+        Container(
+          width: SizeConfig.safeBlockHorizontal * 35,
+          height: SizeConfig.safeBlockVertical * 8,
+          child: Form(
+            key: _formKeyOrdersProxyPort,
+            child: TextFormField(
+              controller: _cntrlOrderProxyPort,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Orders Proxy Port'
+              ),
+              validator: (value){
+                if(value.length == 0){
+                  return 'Empty Orders Proxy Port';
+                }
+                return null;
+              },
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
   @override
   void initState() {
     _db.getSetting().then((data){
       if(data != null){
         setState(() {
           _dropdownValue = data.qmsType;
+          _cntrlProxyHost.text = data.host;
+          _cntrlOrderProxyPort.text = data.ordersPort.toString();
+          _cntrlDeviceProxyPort.text = data.devicesPort.toString();
+          _cntrlTenantId.text = data.tenantId;
         });
       }
     });
@@ -255,6 +419,13 @@ class _SettingScreenState extends State<SettingScreen> {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
+            child: rowInputTenantId(),
+          ),
+          Divider(
+            color: Colors.black,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
             child: rowDropDownQmsType(),
           ),
           Divider(
@@ -270,6 +441,20 @@ class _SettingScreenState extends State<SettingScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: rowInputSkinpackSingletenant(),
+          ),
+          Divider(
+            color: Colors.black,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: rowInputProxyHost(),
+          ),
+          Divider(
+            color: Colors.black
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: rowInputOrderProxyPort(),
           )
         ],
       ),
@@ -289,31 +474,34 @@ class _SettingScreenState extends State<SettingScreen> {
           ),
         ),
         onPressed: (){
-          //_saveImage();
-          _deleteImage().then((data){
-            showDialog(
-              context: context,
-              builder: (BuildContext context){
-                return AlertDialog(
-                  content: Row(
-                    children: <Widget>[
-                      Text('Success change settings', style: TextStyle(
-                        fontSize: 25
-                      )),
-                    ],
-                  ),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text('Close'),
-                      onPressed: (){
+          if(_formKeyProxyHost.currentState.validate() && _formKeyOrdersProxyPort.currentState.validate()){
+            OrderService().initialize();
+            blocOrders.clearBloc();
+            _deleteImage().then((data){
+              showDialog(
+                context: context,
+                builder: (BuildContext context){
+                  return AlertDialog(
+                    content: Row(
+                      children: <Widget>[
+                        Text('Success change settings', style: TextStyle(
+                          fontSize: 25
+                        )),
+                      ],
+                    ),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('Close'),
+                        onPressed: (){
                         Navigator.pop(context);
-                      },
-                    )
-                  ],
-                );
-              }
-            );
-          });
+                        },
+                      )
+                    ],
+                  );
+                }
+              );
+            });
+          }
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

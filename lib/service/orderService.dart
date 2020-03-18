@@ -5,9 +5,10 @@ import 'package:grpc/grpc.dart';
 import 'package:flutter/services.dart';
 import 'package:qms_device/bloc/blocOrder.dart';
 import 'package:qms_device/data/databaseHelper.dart';
+import 'package:qms_device/model/setting.dart';
 import 'package:qms_device/protos/orders.pb.dart';
 import 'package:qms_device/protos/orders.pbgrpc.dart';
-import 'package:qms_device/library/libGrpc.dart' as libGrpc;
+import 'package:qms_device/library/libApps.dart';
 
 class OrderService {
   static OrdersClient _client;
@@ -16,14 +17,16 @@ class OrderService {
   Order _orderValue = Order();
   Tags _tagsValue = Tags();
   Submodules _submValue = Submodules();
-  Future<List<Order>> getOrderDb = DatabaseHelper().getOrder();
+  //Future<List<Order>> getOrderDb = DatabaseHelper().getOrder();
+  Future<Setting> _getSetting = DatabaseHelper().getSetting();
 
   bool _onBadHandler(X509Certificate certificate, String host){
-    return host == '${libGrpc.orderProxyHost}:${libGrpc.orderProxyPort}';
+    //return host == '${libGrpc.orderProxyHost}:${libGrpc.orderProxyPort}';
+    return host == '$orderProxyHost:$orderProxyPort';
   }
 
   CallOptions _callOptions = CallOptions(
-    metadata: {'authorization' : 'Bearer '+libGrpc.orderProxyToken}
+    metadata: {'authorization' : 'Bearer '+orderProxyToken}
   );
 
   void initialize() async {
@@ -42,8 +45,8 @@ class OrderService {
       );
 
       _channel = ClientChannel(
-        libGrpc.orderProxyHost,
-        port: libGrpc.orderProxyPort,
+        orderProxyHost,
+        port: orderProxyPort,
         options: _channelOption
       );
       
