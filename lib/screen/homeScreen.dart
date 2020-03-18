@@ -13,7 +13,57 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController _cnrtlPassword = TextEditingController();
   String qmsType;
+  final String _password = 'testPassword';
+
+  void _showDialogPassword(){
+    _cnrtlPassword.text = "";
+    showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return AlertDialog(
+          title: Text('Input Password'),
+          content: Container(
+            child: Form(
+              key: _formKey,
+              child: TextFormField(
+                obscureText: true,
+                controller: _cnrtlPassword,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Password',
+                ),
+                validator: (value){
+                  if(value != _password && value.length > 0){
+                    _cnrtlPassword.text = '';
+                    return 'Wrong Password';
+                  } else if(value.length == 0){
+                    return 'Empty Password';
+                  }
+                  return null;
+                },
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Process'),
+              onPressed: (){
+                if(_formKey.currentState.validate()){
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => SettingScreen()
+                  ));
+                }
+              },
+            )
+          ],
+        );
+      }
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,9 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => SettingScreen()
-                    ));
+                    _showDialogPassword();
                   },
                 )
               ],
