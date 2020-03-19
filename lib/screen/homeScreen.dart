@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:qms_device/bloc/blocSetting.dart';
-import 'package:qms_device/data/databaseHelper.dart';
+import 'package:qms_device/library/libApps.dart';
 import 'package:qms_device/model/setting.dart';
-import 'package:qms_device/screen/qmsTest3.dart';
+import 'package:qms_device/screen/multiTenant.dart';
 import 'package:qms_device/screen/settingScreen.dart';
 import 'package:qms_device/screen/singleTenant.dart';
 import 'package:qms_device/screen/callingOrder.dart';
@@ -15,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _cnrtlPassword = TextEditingController();
-  String qmsType;
+  //String qmsType;
   final String _password = 'testPassword';
 
   void _showDialogPassword(){
@@ -71,12 +71,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var mediaQueryData = MediaQuery.of(context);
-    final double widthScreen = mediaQueryData.size.width;
-    final double appBarHeight = kToolbarHeight;
-    final double paddingTop = mediaQueryData.padding.top;
-    final double paddingBottom = mediaQueryData.padding.bottom;
-    final double heightScreen = mediaQueryData.size.height - paddingBottom - paddingTop - appBarHeight;
 
     return Scaffold(
       appBar: AppBar(
@@ -96,7 +90,10 @@ class _HomeScreenState extends State<HomeScreen> {
               children: <Widget>[
                 InkWell(
                   child: Container(
-                    color: Colors.yellowAccent,
+                    color: (snapshot.data.qmsType == qmsType[1]) 
+                      ? Colors.yellowAccent
+                      : (snapshot.data.tenantId != null && snapshot.data.tenantId.length > 0)
+                      ? Colors.yellowAccent : Colors.grey,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
@@ -112,15 +109,34 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   onTap: (){
-                    if(snapshot.data.qmsType == 'Multi Tenant'){
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => QmsTest3()
-                      ));
-                    } else {
-                      Navigator.push(context, MaterialPageRoute(
+                    (snapshot.data.qmsType == qmsType[1]) 
+                      ? Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => MultiTenant()
+                      ))
+                      : (snapshot.data.tenantId != null && snapshot.data.tenantId.length > 0)
+                      ? Navigator.push(context, MaterialPageRoute(
                         builder: (context) => SingleTenant()
-                      ));
-                    }
+                      ))
+                      : showDialog(
+                        context: context,
+                        builder: (BuildContext context){
+                          return AlertDialog(
+                            content: Text('Please Insert Tenant ID at Menu Settings',
+                              style: TextStyle(fontSize: 30),
+                            ),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text('Close', style: TextStyle(
+                                  fontSize: 20
+                                )),
+                                onPressed: (){
+                                  Navigator.pop(context);
+                                },
+                              )
+                            ],
+                          );
+                        }
+                      );
                   },
                 ),
                 InkWell(

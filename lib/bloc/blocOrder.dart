@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:qms_device/library/libApps.dart' as libApps;
 import 'package:qms_device/protos/orders.pb.dart';
 import 'package:qms_device/repository/ordersRepository.dart';
+import 'package:qms_device/utils.dart';
 
 class BlocOrders {
   List<Order> _queues = [];
@@ -28,12 +28,6 @@ class BlocOrders {
     //_subject.sink.add(await _ordersRepository.getOrders());
   }
 
-  List<List<Order>> groupByTenant(List<Order> listOrder){
-    var _mapTenant = groupBy(listOrder, (obj) => obj.tenantId);
-    var _tenants = _mapTenant.values.toList();
-    return _tenants;
-  }
-
   void addOrders(Order order) async {
     //_queues.removeWhere((item) => item.uuid == order.uuid);
     _queues.removeWhere((item){
@@ -54,9 +48,9 @@ class BlocOrders {
       }
       return item.uuid == order.uuid;
     });
-    _ordersQueue.sink.add(groupByTenant(_queues));
-    _ordersReady.sink.add(groupByTenant(_readys));
-    _ordersCalling.sink.add(groupByTenant(_callings));
+    _ordersQueue.sink.add(GroupBy.groupByTenant(_queues));
+    _ordersReady.sink.add(GroupBy.groupByTenant(_readys));
+    _ordersCalling.sink.add(GroupBy.groupByTenant(_callings));
     /*_readys.removeWhere((item) => item.uuid == order.uuid);
     _callings.removeWhere((item) => item.uuid == order.uuid);*/
     /*if(order.status == 'new' || order.status == 'pending' 
@@ -69,7 +63,7 @@ class BlocOrders {
         var bDate = b.timestamp;
         return aDate.compareTo(bDate);
       });
-      _ordersQueue.sink.add(groupByTenant(_queues));
+      _ordersQueue.sink.add(GroupBy.groupByTenant(_queues));
     } else if(order.status == 'ready'){
       _readys.add(order);
       _readys.sort((a, b){
@@ -77,7 +71,7 @@ class BlocOrders {
         var bDate = b.timestamp;
         return aDate.compareTo(bDate);
       });
-      _ordersReady.sink.add(groupByTenant(_readys));
+      _ordersReady.sink.add(GroupBy.groupByTenant(_readys));
     } else if(order.status == 'calling'){
       _callings.add(order);
       _callings.sort((a, b){
@@ -85,7 +79,7 @@ class BlocOrders {
         var bDate = b.timestamp;
         return bDate.compareTo(aDate);
       });
-      _ordersCalling.sink.add(groupByTenant(_callings));
+      _ordersCalling.sink.add(GroupBy.groupByTenant(_callings));
     }
   }
 

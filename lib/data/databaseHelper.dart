@@ -2,12 +2,12 @@ import 'dart:io' as io;
 import 'dart:async';
 
 import 'package:path/path.dart';
+import 'package:qms_device/library/libApps.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:streamqflite/streamqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qms_device/model/skinPack.dart';
 import 'package:qms_device/model/setting.dart';
-import 'package:qms_device/model/tenant.dart';
 import 'package:qms_device/protos/orders.pb.dart';
 
 class DatabaseHelper {
@@ -49,10 +49,6 @@ class DatabaseHelper {
     );
 
     await db.execute(
-      "CREATE TABLE tenant(tenantId TEXT, tenantCardColor TEXT)"
-    );
-
-    await db.execute(
       "CREATE TABLE setting(id INTEGER, qmsType TEXT, host TEXT," 
       "ordersPort INTEGER, devicesPort INTEGER, tenantID TEXT)"
     );
@@ -66,7 +62,7 @@ class DatabaseHelper {
     );
 
     await db.execute(
-      "INSERT INTO setting VALUES('1','Multi Tenant','192.168.0.223','50051','50053','')"
+      "INSERT INTO setting VALUES('1','${qmsType[0]}','192.168.0.223','50051','50053','')"
     );
     
     print("Table Created");
@@ -95,15 +91,6 @@ class DatabaseHelper {
       "'${order.sourceTrackingId}','${order.sourceBatch}','${order.pluId}','${order.pluText}',"
       "'${order.qty}','${order.status}','${order.uuid}','${order.version}','${order.orderType}',"
       "'${order.parentUuid}')"
-    );
-    return res;
-  }
-
-  //-Save tenant to database-------------------------------------------------------------
-  Future<int> saveTenant(Tenant tenant) async {
-    var dbClient = await db;
-    int res = await dbClient.rawInsert(
-      "INSERT INTO tenant(tenantId) VALUES('${tenant.tenantId}')"
     );
     return res;
   }
@@ -313,22 +300,6 @@ class DatabaseHelper {
       );
     }
     return orderList;
-  }
-
-  //-Get Tenant from database------------------------------------------------------------
-  Future<List<Tenant>> getTenant() async {
-    var dbClient = await db;
-    List<Map> list = await dbClient.rawQuery("select * from tenant");
-    List<Tenant> tenants = List();
-    for (var i = 0; i < list.length; i++) {
-      tenants.add(
-        Tenant(
-          tenantId: list[i]['tenantId'],
-          tenantCardColor: list[i]['tenantCardColor']
-        )
-      );
-    }
-    return tenants;
   }
 
   Future<Setting> getSetting() async {

@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart';
 import 'package:flutter/services.dart';
 import 'package:qms_device/bloc/blocOrder.dart';
-import 'package:qms_device/data/databaseHelper.dart';
-import 'package:qms_device/model/setting.dart';
 import 'package:qms_device/protos/orders.pb.dart';
 import 'package:qms_device/protos/orders.pbgrpc.dart';
 import 'package:qms_device/library/libApps.dart';
@@ -17,8 +15,6 @@ class OrderService {
   Order _orderValue = Order();
   Tags _tagsValue = Tags();
   Submodules _submValue = Submodules();
-  //Future<List<Order>> getOrderDb = DatabaseHelper().getOrder();
-  Future<Setting> _getSetting = DatabaseHelper().getSetting();
 
   bool _onBadHandler(X509Certificate certificate, String host){
     //return host == '${libGrpc.orderProxyHost}:${libGrpc.orderProxyPort}';

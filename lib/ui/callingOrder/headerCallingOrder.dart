@@ -98,7 +98,7 @@ class HeaderCallingOrder extends StatelessWidget {
                   right: 8.0
                 ),
                 child: RaisedButton(
-                  color: Colors.white,
+                  color: (ordersCalling != null) ? Colors.white : Colors.grey,
                   elevation: 0.0,
                   onPressed: (){
                     if(ordersCalling != null){

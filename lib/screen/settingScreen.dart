@@ -3,20 +3,15 @@ import 'dart:io' as io;
 import 'package:flutter/material.dart';
 import 'package:archive/archive.dart';
 import 'package:archive/archive_io.dart';
-import 'package:flutter/services.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
-import 'package:qms_device/bloc/blocDropDownSetting.dart';
 import 'package:qms_device/bloc/blocOrder.dart';
 import 'package:qms_device/bloc/blocSetting.dart';
 import 'package:qms_device/data/databaseHelper.dart';
-import 'package:qms_device/library/libGrpc.dart';
 import 'package:qms_device/library/libSizeConfig.dart';
 import 'package:qms_device/model/setting.dart';
 import 'package:qms_device/library/libApps.dart';
 import 'package:qms_device/model/skinPack.dart';
-import 'package:qms_device/protos/orders.pb.dart';
 import 'package:qms_device/service/orderService.dart';
 
 

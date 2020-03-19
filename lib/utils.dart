@@ -2,10 +2,11 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'dart:async';
-import 'package:image/image.dart' as image;
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:qms_device/protos/orders.pb.dart';
 
 class ImageLoader{
 
@@ -29,16 +30,6 @@ class ImageLoader{
     return completer.future;
   }
 }
-
-/*class AnimationLoader{
-  static Future<Animation> loadAnimation({String path}) async {
-    File animationFile = File(path);
-    List<int> animation = animationFile.readAsBytesSync();
-    final Completer<Animation> completer = Completer();
-    var animationValue = image.GifDecoder().decodeImage(animation);
-    return animationValue;
-  }
-}*/
 
 class ImageEditor extends CustomPainter{
   ui.Image image;
@@ -138,5 +129,19 @@ class TextureImage{
     } else {
       return exceptionWidget;
     }
+  }
+}
+
+class GroupBy{
+  static List<List<Order>> groupByTenant(List<Order> listOrder){
+    var _mapTenant = groupBy(listOrder, (obj) => obj.tenantId);
+    var _tenants = _mapTenant.values.toList();
+    return _tenants;
+  }
+
+  static List<List<Order>> groupBySourceBatch(List<Order> listOrder){
+    var _mapSourceBatch = groupBy(listOrder, (obj) => obj.sourceBatch);
+    var _orders = _mapSourceBatch.values.toList();
+    return _orders;
   }
 }

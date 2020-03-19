@@ -10,12 +10,12 @@ import 'package:qms_device/ui/tenantGridViewContainer.dart';
 import 'package:qms_device/ui/waitingQueueContainer.dart';
 import 'package:qms_device/utils.dart';
 
-class QmsTest3 extends StatefulWidget {
+class MultiTenant extends StatefulWidget {
   @override
-  _QmsTest3State createState() => _QmsTest3State();
+  _MultiTenantState createState() => _MultiTenantState();
 }
 
-class _QmsTest3State extends State<QmsTest3> {
+class _MultiTenantState extends State<MultiTenant> {
   OrderService _service = OrderService();
 
   //-Stream Orders from BLoC and filter by tenantId, status = ready----------------------
