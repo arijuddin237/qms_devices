@@ -14,22 +14,24 @@ class BlocOrders {
     _ordersQueue = BehaviorSubject<List<List<Order>>>.seeded([]);
     _ordersReady = BehaviorSubject<List<List<Order>>>.seeded([]);
     _ordersCalling = BehaviorSubject<List<List<Order>>>.seeded([]);
+    _headerCalling = BehaviorSubject<List<Order>>.seeded([]);
   }
 
   BehaviorSubject<List<List<Order>>> _ordersQueue = BehaviorSubject<List<List<Order>>>();
   BehaviorSubject<List<List<Order>>> _ordersReady = BehaviorSubject<List<List<Order>>>();
   BehaviorSubject<List<List<Order>>> _ordersCalling = BehaviorSubject<List<List<Order>>>();
+  BehaviorSubject<List<Order>> _headerCalling = BehaviorSubject<List<Order>>();
 
   BehaviorSubject<List<List<Order>>> get ordersQueue => _ordersQueue;
   BehaviorSubject<List<List<Order>>> get ordersReady => _ordersReady;
   BehaviorSubject<List<List<Order>>> get ordersCalling => _ordersCalling;
+  BehaviorSubject<List<Order>> get headerCalling => _headerCalling;
 
   void getOrders() async {
     //_subject.sink.add(await _ordersRepository.getOrders());
   }
 
   void addOrders(Order order) async {
-    //_queues.removeWhere((item) => item.uuid == order.uuid);
     _queues.removeWhere((item){
       if(item.uuid == order.uuid){
         print('remove ${item.sourceBatch}, ${item.status}, ${item.uuid} == ${order.sourceBatch}, ${item.status}, ${order.uuid}');
@@ -51,11 +53,6 @@ class BlocOrders {
     _ordersQueue.sink.add(GroupBy.groupByTenant(_queues));
     _ordersReady.sink.add(GroupBy.groupByTenant(_readys));
     _ordersCalling.sink.add(GroupBy.groupByTenant(_callings));
-    /*_readys.removeWhere((item) => item.uuid == order.uuid);
-    _callings.removeWhere((item) => item.uuid == order.uuid);*/
-    /*if(order.status == 'new' || order.status == 'pending' 
-      || order.status == 'processing' || order.status == 'ready'
-    ){*/
     if(order.status != 'completed' && order.status != "calling" && order.status != 'complete'){
       _queues.add(order);
       _queues.sort((a, b){
@@ -83,12 +80,17 @@ class BlocOrders {
     }
   }
 
+  void addHeaderCalling(List<Order> orders) {
+    _headerCalling.sink.add(orders);
+  }
+
   void clearBloc() {
     _queues.clear();
     _readys.clear();
     _callings.clear();
     _ordersQueue.sink.add(null);
     _ordersCalling.sink.add(null);
+    _headerCalling.sink.add([]);
   }
 
   void saveOrder({Order order}) async {
@@ -105,6 +107,7 @@ class BlocOrders {
     _ordersQueue.close();
     _ordersReady.close();
     _ordersCalling.close();
+    _headerCalling.close();
   }
 }
 final blocOrders = BlocOrders();

@@ -240,7 +240,7 @@ class _SingleTenantState extends State<SingleTenant> {
     return Scaffold(
       body: SafeArea(
         child: StreamBuilder(
-          stream: _service.streamGetOrder(),
+          stream: _service.streamOrder(),
           builder: (context, snapshot) {
             if(snapshot.connectionState != ConnectionState.done){
               return Center(

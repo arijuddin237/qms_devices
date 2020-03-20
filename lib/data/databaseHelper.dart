@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:path/path.dart';
 import 'package:qms_device/library/libApps.dart';
+import 'package:qms_device/model/sourceBatch.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:streamqflite/streamqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -62,6 +63,10 @@ class DatabaseHelper {
     );
 
     await db.execute(
+      "CREATE TABLE sourceBatch(sourceBatch INTEGER, tenantId TEXT)"
+    );
+
+    await db.execute(
       "INSERT INTO setting VALUES('1','${qmsType[0]}','192.168.0.223','50051','50053','')"
     );
     
@@ -107,6 +112,14 @@ class DatabaseHelper {
     var dbClient = await db;
     int res = await dbClient.rawInsert(
       "INSERT INTO skinpackSingleTenant(imagename) VALUES ('${skinpack.imageName}')"
+    );
+    return res;
+  }
+
+  Future<int> saveSourceBatch(SourceBatch sourceBatch) async {
+    var dbClient = await db;
+    int res = await dbClient.rawInsert(
+      "INSERT INTO sourceBatch VALUES ('${sourceBatch.sourceBatch}','${sourceBatch.tenantId}')"
     );
     return res;
   }
@@ -348,6 +361,27 @@ class DatabaseHelper {
     return skinpacks;
   }
 
+  Future<SourceBatch> getSourceBatch(String tenantId) async {
+    var dbClient = await db;
+    List<Map> list = await dbClient.rawQuery(
+      "select * from sourceBatch where tenantId = '$tenantId'"
+    );
+    List<SourceBatch> sourceBatch = List();
+    for (var res in list) {
+      sourceBatch.add(
+        SourceBatch(
+          sourceBatch: res['sourceBatch'],
+          tenantId: res['tenantId']
+        )
+      );
+    }
+    if(sourceBatch.length > 0){
+      return sourceBatch.first;
+    } else {
+      return null;
+    }
+  }
+
   //-Update Setting----------------------------------------------------------------------
   Future<int> updateSetting(Setting setting) async {
     var dbClient = await db;
@@ -356,6 +390,15 @@ class DatabaseHelper {
       "host = '${setting.host}', ordersPort = '${setting.ordersPort}',"
       "devicesPort = '${setting.devicesPort}', tenantID = '${setting.tenantId}'"
       "WHERE id = ${setting.id}"
+    );
+    return res;
+  }
+
+  Future<int> updateSourceBatch(SourceBatch sourceBatch) async {
+    var dbClient = await db;
+    int res = await dbClient.rawUpdate(
+      "UPDATE sourceBatch SET sourceBatch = '${sourceBatch.sourceBatch}'"
+      "WHERE tenantId = '${sourceBatch.tenantId}'"
     );
     return res;
   }

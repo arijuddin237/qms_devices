@@ -52,8 +52,13 @@ class _CallingOrderState extends State<CallingOrder> {
                               }
                             }
                           }
+                          if(calledList.length > 0){
+                            blocOrders.addHeaderCalling(
+                              GroupBy.groupBySourceBatch(calledList[0]).first
+                            );
+                          }
                           return HeaderCallingOrder(
-                            ordersCalling: (calledList.length > 0) ? GroupBy.groupBySourceBatch(calledList[0]).first : null,
+                            //ordersCalling: (calledList.length > 0) ? GroupBy.groupBySourceBatch(calledList[0]).first : null,
                           );
                         } else {
                           return HeaderCallingOrder();

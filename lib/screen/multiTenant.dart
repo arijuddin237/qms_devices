@@ -296,7 +296,7 @@ class _MultiTenantState extends State<MultiTenant> {
     return Scaffold(
       body: SafeArea(
         child: StreamBuilder(
-          stream: _service.streamGetOrder(),
+          stream: _service.streamOrder(),
           builder: (context, snapshot) {
             if(!snapshot.hasData){
               return Center(
