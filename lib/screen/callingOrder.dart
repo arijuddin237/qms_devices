@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:qms_device/bloc/blocFontSize.dart';
 import 'package:qms_device/bloc/blocOrder.dart';
 import 'package:qms_device/bloc/blocSetting.dart';
 import 'package:qms_device/library/libSizeConfig.dart';
+import 'package:qms_device/model/fontSize.dart';
 import 'package:qms_device/model/setting.dart';
 import 'package:qms_device/service/orderService.dart';
 import 'package:qms_device/protos/orders.pb.dart';
@@ -28,142 +30,150 @@ class _CallingOrderState extends State<CallingOrder> {
       child: StreamBuilder(
         stream: _service.streamGetOrder(),
         builder: (context, snapshot){
-          return Column(
-            children: <Widget>[
-              StreamBuilder<Setting>(
-                stream: blocSetting.subject.stream,
-                builder: (context, snapshotSetting) {
-                  return Container(
-                    child: StreamBuilder<List<List<Order>>>(
-                      stream: blocOrders.ordersCalling.stream,
-                      builder: (context, snapshot){
-                        if(snapshot.hasData && snapshot.data.length > 0){
-                          List<List<Order>> calledList = List<List<Order>>();
-                          if(snapshotSetting.hasData){
-                            for (var groupTenant in snapshot.data) {
-                              List<Order> orders = List<Order>();
-                              for (var order in groupTenant) {
-                                if(order.tenantId == snapshotSetting.data.tenantId){
-                                  orders.add(order);
-                                }
-                              }
-                              if(orders.length > 0){
-                                calledList.add(orders);
-                              }
-                            }
-                          }
-                          if(calledList.length > 0){
-                            blocOrders.addHeaderCalling(
-                              GroupBy.groupBySourceBatch(calledList[0]).first
-                            );
-                          }
-                          return HeaderCallingOrder(
-                            //ordersCalling: (calledList.length > 0) ? GroupBy.groupBySourceBatch(calledList[0]).first : null,
-                          );
-                        } else {
-                          return HeaderCallingOrder();
-                        }
-                      },
-                    ),
-                  );
-                }
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
+          return StreamBuilder<FontSize>(
+            stream: blocFontSize.getFontSize.stream,
+            builder: (context, snapshotFont) {
+              if(!snapshotFont.hasData){
+                return Container();
+              }
+              return Column(
                 children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      Text('Queueing', style: TextStyle(
-                          fontSize: 50,
-                      )),
-                      StreamBuilder<Setting>(
-                        stream: blocSetting.subject.stream,
-                        builder: (context, snapshotSetting) {
-                          return Container(
-                            width: SizeConfig.safeBlockHorizontal * 49,
-                            height: SizeConfig.safeBlockVertical * 52,
-                            child: StreamBuilder<List<List<Order>>>(
-                              stream: blocOrders.ordersQueue.stream,
-                              builder: (context, snapshot){
-                                if(snapshot.hasData && snapshot.data.length > 0){
-                                  List<List<Order>> queueList = List<List<Order>>();
-                                  if(snapshotSetting.hasData){
-                                    for (var groupTenant in snapshot.data) {
-                                      List<Order> orders = List<Order>();
-                                      for (var order in groupTenant) {
-                                        if(order.tenantId == snapshotSetting.data.tenantId){
-                                          orders.add(order);
-                                        }
-                                      }
-                                      if(orders.length > 0){
-                                        queueList.add(orders);
-                                      }
+                  StreamBuilder<Setting>(
+                    stream: blocSetting.subject.stream,
+                    builder: (context, snapshotSetting) {
+                      return Container(
+                        child: StreamBuilder<List<List<Order>>>(
+                          stream: blocOrders.ordersCalling.stream,
+                          builder: (context, snapshot){
+                            if(snapshot.hasData && snapshot.data.length > 0){
+                              List<List<Order>> calledList = List<List<Order>>();
+                              if(snapshotSetting.hasData){
+                                for (var groupTenant in snapshot.data) {
+                                  List<Order> orders = List<Order>();
+                                  for (var order in groupTenant) {
+                                    if(order.tenantId == snapshotSetting.data.tenantId){
+                                      orders.add(order);
                                     }
                                   }
-                                  return ListViewQueue(
-                                    orders: (queueList == null) ? snapshot.data : queueList
-                                  );
-                                } else {
-                                  return Container();
+                                  if(orders.length > 0){
+                                    calledList.add(orders);
+                                  }
                                 }
-                              },
-                            ),
-                          );
-                        }
-                      ),
-                    ],
+                              }
+                              if(calledList.length > 0){
+                                blocOrders.addHeaderCalling(
+                                  GroupBy.groupBySourceBatch(calledList[0]).first
+                                );
+                              }
+                              return HeaderCallingOrder(
+                                //ordersCalling: (calledList.length > 0) ? GroupBy.groupBySourceBatch(calledList[0]).first : null,
+                              );
+                            } else {
+                              return HeaderCallingOrder();
+                            }
+                          },
+                        ),
+                      );
+                    }
                   ),
-                  VerticalDivider(
-                    color: Colors.black,
-                  ),
-                  Column(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text('Called Queue', style: TextStyle(
-                        fontSize: 50
-                      )),
-                      StreamBuilder<Setting>(
-                        stream: blocSetting.subject.stream,
-                        builder: (context, snapshotSetting) {
-                          return Container(
-                            width: SizeConfig.safeBlockHorizontal * 49,
-                            height: SizeConfig.safeBlockVertical * 52,
-                            child: 
-                              StreamBuilder<List<List<Order>>>(
-                              stream: blocOrders.ordersCalling.stream,
-                              builder: (context, snapshot){
-                                if(snapshot.hasData && snapshot.data.length > 0){
-                                  List<List<Order>> calledList = List<List<Order>>();
-                                  if(snapshotSetting.hasData){
-                                    for (var groupTenant in snapshot.data) {
-                                      List<Order> orders = List<Order>();
-                                      for (var order in groupTenant) {
-                                        if(order.tenantId == snapshotSetting.data.tenantId){
-                                          orders.add(order);
+                      Column(
+                        children: <Widget>[
+                          Text('Queueing', style: TextStyle(
+                              fontSize: snapshotFont.data.fontSize4,
+                          )),
+                          StreamBuilder<Setting>(
+                            stream: blocSetting.subject.stream,
+                            builder: (context, snapshotSetting) {
+                              return Container(
+                                width: SizeConfig.safeBlockHorizontal * 49,
+                                height: SizeConfig.safeBlockVertical * 52,
+                                child: StreamBuilder<List<List<Order>>>(
+                                  stream: blocOrders.ordersQueue.stream,
+                                  builder: (context, snapshot){
+                                    if(snapshot.hasData && snapshot.data.length > 0){
+                                      List<List<Order>> queueList = List<List<Order>>();
+                                      if(snapshotSetting.hasData){
+                                        for (var groupTenant in snapshot.data) {
+                                          List<Order> orders = List<Order>();
+                                          for (var order in groupTenant) {
+                                            if(order.tenantId == snapshotSetting.data.tenantId){
+                                              orders.add(order);
+                                            }
+                                          }
+                                          if(orders.length > 0){
+                                            queueList.add(orders);
+                                          }
                                         }
                                       }
-                                      if(orders.length > 0){
-                                        calledList.add(orders);
-                                      }
+                                      return ListViewQueue(
+                                        orders: (queueList == null) ? snapshot.data : queueList
+                                      );
+                                    } else {
+                                      return Container();
                                     }
-                                  }
-                                  return ListViewQueue(
-                                    orders: (calledList == null) ? snapshot.data : calledList,
-                                    calledQueue: true,
-                                  );
-                                } else {
-                                  return Container();
-                                }
-                              },
-                            )
-                          );
-                        }
+                                  },
+                                ),
+                              );
+                            }
+                          ),
+                        ],
+                      ),
+                      VerticalDivider(
+                        color: Colors.black,
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Text('Called Queue', style: TextStyle(
+                            fontSize: snapshotFont.data.fontSize4
+                          )),
+                          StreamBuilder<Setting>(
+                            stream: blocSetting.subject.stream,
+                            builder: (context, snapshotSetting) {
+                              return Container(
+                                width: SizeConfig.safeBlockHorizontal * 49,
+                                height: SizeConfig.safeBlockVertical * 52,
+                                child: 
+                                  StreamBuilder<List<List<Order>>>(
+                                  stream: blocOrders.ordersCalling.stream,
+                                  builder: (context, snapshot){
+                                    if(snapshot.hasData && snapshot.data.length > 0){
+                                      List<List<Order>> calledList = List<List<Order>>();
+                                      if(snapshotSetting.hasData){
+                                        for (var groupTenant in snapshot.data) {
+                                          List<Order> orders = List<Order>();
+                                          for (var order in groupTenant) {
+                                            if(order.tenantId == snapshotSetting.data.tenantId){
+                                              orders.add(order);
+                                            }
+                                          }
+                                          if(orders.length > 0){
+                                            calledList.add(orders);
+                                          }
+                                        }
+                                      }
+                                      return ListViewQueue(
+                                        orders: (calledList == null) ? snapshot.data : calledList,
+                                        calledQueue: true,
+                                      );
+                                    } else {
+                                      return Container();
+                                    }
+                                  },
+                                )
+                              );
+                            }
+                          ),
+                        ],
                       ),
                     ],
-                  ),
+                  )
                 ],
-              )
-            ],
+              );
+            }
           );
         },
       ),

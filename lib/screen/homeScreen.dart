@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:qms_device/bloc/blocFontSize.dart';
 import 'package:qms_device/bloc/blocSetting.dart';
 import 'package:qms_device/library/libApps.dart';
 import 'package:qms_device/library/libSizeConfig.dart';
+import 'package:qms_device/model/fontSize.dart';
 import 'package:qms_device/model/setting.dart';
 import 'package:qms_device/screen/multiTenant.dart';
 import 'package:qms_device/screen/settingScreen.dart';
@@ -95,7 +97,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
+    blocFontSize.changeFontSize(context);
+    print(MediaQuery.of(context).size.width.toString());
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -107,89 +110,97 @@ class _HomeScreenState extends State<HomeScreen> {
           if(!snapshot.hasData){
             return Container();            
           }
-          return SafeArea(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                InkWell(
-                  child: Container(
-                    width: SizeConfig.safeBlockHorizontal * (100/3),
-                    height: SizeConfig.safeBlockVertical * 100,
-                    color: (snapshot.data.qmsType == qmsType[1])
-                      ? Colors.yellowAccent
-                      : (snapshot.data.tenantId != null && snapshot.data.tenantId.length > 0)
-                      ? Colors.yellowAccent : Colors.grey,
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(Icons.assessment, size: 120),
-                        Text('QMS', style: TextStyle(
-                          fontSize: 100
-                        ))
-                      ],
+          return StreamBuilder<FontSize>(
+            stream: blocFontSize.getFontSize.stream,
+            builder: (context, snapshotFont) {
+              if(!snapshotFont.hasData){
+                return Container();
+              }
+              return SafeArea(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    InkWell(
+                      child: Container(
+                        width: SizeConfig.safeBlockHorizontal * (100/3),
+                        height: SizeConfig.safeBlockVertical * 100,
+                        color: (snapshot.data.qmsType == qmsType[1])
+                          ? Colors.yellowAccent
+                          : (snapshot.data.tenantId != null && snapshot.data.tenantId.length > 0)
+                          ? Colors.yellowAccent : Colors.grey,
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.assessment, size: 120),
+                            Text('QMS', style: TextStyle(
+                              fontSize: snapshotFont.data.fontSize2
+                            ))
+                          ],
+                        ),
+                      ),
+                      onTap: (){
+                        (snapshot.data.qmsType == qmsType[1]) 
+                          ? Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => MultiTenant()
+                          ))
+                          : (snapshot.data.tenantId != null && snapshot.data.tenantId.length > 0)
+                          ? Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => SingleTenant()
+                          ))
+                          : _showDialogAlert();
+                      },
                     ),
-                  ),
-                  onTap: (){
-                    (snapshot.data.qmsType == qmsType[1]) 
-                      ? Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => MultiTenant()
-                      ))
-                      : (snapshot.data.tenantId != null && snapshot.data.tenantId.length > 0)
-                      ? Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => SingleTenant()
-                      ))
-                      : _showDialogAlert();
-                  },
+                    InkWell(
+                      child: Container(
+                        width: SizeConfig.safeBlockHorizontal * (100/3),
+                        height: SizeConfig.safeBlockVertical * 100,
+                        color: (snapshot.data.tenantId != null && snapshot.data.tenantId.length > 0)
+                          ? Colors.greenAccent
+                          : Colors.grey,
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.list, size: 120),
+                            Text('Calling Order', style: TextStyle(
+                              fontSize: snapshotFont.data.fontSize3
+                            ))
+                          ],
+                        ),
+                      ),
+                      onTap: (){
+                        (snapshot.data.tenantId != null && snapshot.data.tenantId.length > 0)
+                          ? Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => CallingOrder()
+                            ))
+                          : _showDialogAlert();
+                      },
+                    ),
+                    InkWell(
+                      child: Container(
+                        width: SizeConfig.safeBlockHorizontal * (100/3),
+                        height: SizeConfig.safeBlockVertical * 100,
+                        color: Colors.amber,
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.settings, size: 120),
+                            Text('Setting', style: TextStyle(
+                              fontSize: snapshotFont.data.fontSize2
+                            ))
+                          ],
+                        ),
+                      ),
+                      onTap: (){
+                        _showDialogPassword();
+                      },
+                    )
+                  ],
                 ),
-                InkWell(
-                  child: Container(
-                    width: SizeConfig.safeBlockHorizontal * (100/3),
-                    height: SizeConfig.safeBlockVertical * 100,
-                    color: (snapshot.data.tenantId != null && snapshot.data.tenantId.length > 0)
-                      ? Colors.greenAccent
-                      : Colors.grey,
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(Icons.list, size: 120),
-                        Text('Calling Order', style: TextStyle(
-                          fontSize: 80
-                        ))
-                      ],
-                    ),
-                  ),
-                  onTap: (){
-                    (snapshot.data.tenantId != null && snapshot.data.tenantId.length > 0)
-                      ? Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => CallingOrder()
-                        ))
-                      : _showDialogAlert();
-                  },
-                ),
-                InkWell(
-                  child: Container(
-                    width: SizeConfig.safeBlockHorizontal * (100/3),
-                    height: SizeConfig.safeBlockVertical * 100,
-                    color: Colors.amber,
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(Icons.settings, size: 120),
-                        Text('Setting', style: TextStyle(
-                          fontSize: 100
-                        ))
-                      ],
-                    ),
-                  ),
-                  onTap: (){
-                    _showDialogPassword();
-                  },
-                )
-              ],
-            ),
+              );
+            }
           );
         }
       )

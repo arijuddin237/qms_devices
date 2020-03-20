@@ -145,3 +145,16 @@ class GroupBy{
     return _orders;
   }
 }
+
+class ResponsiveWidget{
+  static bool isLargeScreen(BuildContext context){
+    return MediaQuery.of(context).size.width > 1000;
+  }
+  static bool isMediumScreen(BuildContext context){
+    return MediaQuery.of(context).size.width > 500 &&
+    MediaQuery.of(context).size.width < 1000;
+  }
+  static bool isSmallScreen(BuildContext context){
+    return MediaQuery.of(context).size.width < 500;
+  }
+}

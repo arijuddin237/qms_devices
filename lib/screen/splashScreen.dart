@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:qms_device/bloc/blocFontSize.dart';
 import 'package:qms_device/bloc/blocSetting.dart';
 import 'package:qms_device/data/databaseHelper.dart';
 import 'package:qms_device/model/setting.dart';
@@ -57,6 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    blocFontSize.changeFontSize(context);
     SizeConfig().init(context);
     Future.delayed(const Duration(seconds: 2), _handlerTapEvent);
     return Scaffold(

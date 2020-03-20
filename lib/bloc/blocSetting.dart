@@ -41,6 +41,7 @@ class BlocSetting {
 
   void dispose(){
     _subject.close();
+    _sourceBatch.close();
   }
 }
 final blocSetting = BlocSetting();
