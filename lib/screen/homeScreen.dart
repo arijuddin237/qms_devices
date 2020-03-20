@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qms_device/bloc/blocSetting.dart';
 import 'package:qms_device/library/libApps.dart';
+import 'package:qms_device/library/libSizeConfig.dart';
 import 'package:qms_device/model/setting.dart';
 import 'package:qms_device/screen/multiTenant.dart';
 import 'package:qms_device/screen/settingScreen.dart';
@@ -69,6 +70,29 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void _showDialogAlert(){
+    showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return AlertDialog(
+          content: Text('Please Insert Tenant ID at Menu Settings',style: TextStyle(
+            fontSize: 30
+          )),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Close', style: TextStyle(
+                fontSize: 20
+              )),
+              onPressed: (){
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -84,28 +108,26 @@ class _HomeScreenState extends State<HomeScreen> {
             return Container();            
           }
           return SafeArea(
-            child: GridView.count(
-              crossAxisCount: 3,
-              childAspectRatio: 0.7,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 InkWell(
                   child: Container(
-                    color: (snapshot.data.qmsType == qmsType[1]) 
+                    width: SizeConfig.safeBlockHorizontal * (100/3),
+                    height: SizeConfig.safeBlockVertical * 100,
+                    color: (snapshot.data.qmsType == qmsType[1])
                       ? Colors.yellowAccent
                       : (snapshot.data.tenantId != null && snapshot.data.tenantId.length > 0)
                       ? Colors.yellowAccent : Colors.grey,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        //mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(Icons.assignment, size: 120,),
-                          Text('QMS', style: TextStyle(
-                            fontSize: 100
-                          ))
-                        ],
-                      ),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.assessment, size: 120),
+                        Text('QMS', style: TextStyle(
+                          fontSize: 100
+                        ))
+                      ],
                     ),
                   ),
                   onTap: (){
@@ -117,89 +139,49 @@ class _HomeScreenState extends State<HomeScreen> {
                       ? Navigator.push(context, MaterialPageRoute(
                         builder: (context) => SingleTenant()
                       ))
-                      : showDialog(
-                        context: context,
-                        builder: (BuildContext context){
-                          return AlertDialog(
-                            content: Text('Please Insert Tenant ID at Menu Settings',
-                              style: TextStyle(fontSize: 30),
-                            ),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: Text('Close', style: TextStyle(
-                                  fontSize: 20
-                                )),
-                                onPressed: (){
-                                  Navigator.pop(context);
-                                },
-                              )
-                            ],
-                          );
-                        }
-                      );
+                      : _showDialogAlert();
                   },
                 ),
                 InkWell(
                   child: Container(
-                    color: (snapshot.data.tenantId != null && snapshot.data.tenantId.length > 0) 
-                      ? Colors.blueAccent 
+                    width: SizeConfig.safeBlockHorizontal * (100/3),
+                    height: SizeConfig.safeBlockVertical * 100,
+                    color: (snapshot.data.tenantId != null && snapshot.data.tenantId.length > 0)
+                      ? Colors.greenAccent
                       : Colors.grey,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(Icons.list, size: 120,),
-                          Text('Calling Order', style: TextStyle(
-                            fontSize: 80
-                          ))
-                        ],
-                      ),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.list, size: 120),
+                        Text('Calling Order', style: TextStyle(
+                          fontSize: 80
+                        ))
+                      ],
                     ),
                   ),
                   onTap: (){
-                    (snapshot.data.tenantId != null && snapshot.data.tenantId.length > 0) 
+                    (snapshot.data.tenantId != null && snapshot.data.tenantId.length > 0)
                       ? Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => CallingOrder()
-                      ))
-                      : showDialog(
-                        context: context,
-                        builder: (BuildContext context){
-                          return AlertDialog(
-                            content: Text('Please Insert Tenant ID at Menu Settings',
-                              style: TextStyle(fontSize: 30),
-                            ),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: Text('Close', style: TextStyle(
-                                  fontSize: 20
-                                )),
-                                onPressed: (){
-                                  Navigator.pop(context);
-                                },
-                              )
-                            ],
-                          );
-                        }
-                      );
+                          builder: (context) => CallingOrder()
+                        ))
+                      : _showDialogAlert();
                   },
                 ),
                 InkWell(
                   child: Container(
-                    color: Colors.brown,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        //mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(Icons.settings, size: 120,),
-                          Text('Settings', style: TextStyle(
-                            fontSize: 100
-                          ))
-                        ],
-                      ),
+                    width: SizeConfig.safeBlockHorizontal * (100/3),
+                    height: SizeConfig.safeBlockVertical * 100,
+                    color: Colors.amber,
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.settings, size: 120),
+                        Text('Setting', style: TextStyle(
+                          fontSize: 100
+                        ))
+                      ],
                     ),
                   ),
                   onTap: (){
