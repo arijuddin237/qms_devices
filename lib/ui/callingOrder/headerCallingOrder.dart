@@ -76,7 +76,7 @@ class HeaderCallingOrder extends StatelessWidget {
                     child: StreamBuilder<Setting>(
                       stream: blocSetting.subject.stream,
                       builder: (context, snapshotSetting) {
-                        if(!snapshot.hasData){
+                        if(!snapshotSetting.hasData){
                           return Container();
                         } else {
                           blocSetting.getSourceBatch(
