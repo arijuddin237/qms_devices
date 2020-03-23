@@ -26,47 +26,55 @@ class _HomeScreenState extends State<HomeScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context){
-        return AlertDialog(
-          title: Text('Input Password', style: TextStyle(
-            fontSize: 30
-          )),
-          content: Container(
-            child: Form(
-              key: _formKey,
-              child: TextFormField(
-                obscureText: true,
-                controller: _cnrtlPassword,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Password',
-                ),
-                validator: (value){
-                  if(value != _password && value.length > 0){
-                    _cnrtlPassword.text = '';
-                    return 'Wrong Password';
-                  } else if(value.length == 0){
-                    return 'Empty Password';
-                  }
-                  return null;
-                },
-              ),
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Process', style: TextStyle(
-                fontSize: 20
+        return StreamBuilder<FontSize>(
+          stream: blocFontSize.getFontSize.stream,
+          builder: (context, snapshotFont) {
+            if(!snapshotFont.hasData){
+              return Container();
+            }
+            return AlertDialog(
+              title: Text('Input Password', style: TextStyle(
+                fontSize: snapshotFont.data.fontSize9
               )),
-              onPressed: (){
-                if(_formKey.currentState.validate()){
-                  Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => SettingScreen()
-                  ));
-                }
-              },
-            )
-          ],
+              content: Container(
+                child: Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    obscureText: true,
+                    controller: _cnrtlPassword,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Password',
+                    ),
+                    validator: (value){
+                      if(value != _password && value.length > 0){
+                        _cnrtlPassword.text = '';
+                        return 'Wrong Password';
+                      } else if(value.length == 0){
+                        return 'Empty Password';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Process', style: TextStyle(
+                    fontSize: snapshotFont.data.fontSize10
+                  )),
+                  onPressed: (){
+                    if(_formKey.currentState.validate()){
+                      Navigator.pop(context);
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => SettingScreen()
+                      ));
+                    }
+                  },
+                )
+              ],
+            );
+          }
         );
       }
     );
@@ -76,20 +84,28 @@ class _HomeScreenState extends State<HomeScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context){
-        return AlertDialog(
-          content: Text('Please Insert Tenant ID at Menu Settings',style: TextStyle(
-            fontSize: 30
-          )),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Close', style: TextStyle(
-                fontSize: 20
+        return StreamBuilder<FontSize>(
+          stream: blocFontSize.getFontSize.stream,
+          builder: (context, snapshotFont) {
+            if(!snapshotFont.hasData){
+              return Container();
+            }
+            return AlertDialog(
+              content: Text('Please Insert Tenant ID at Menu Settings',style: TextStyle(
+                fontSize: snapshotFont.data.fontSize9
               )),
-              onPressed: (){
-                Navigator.pop(context);
-              },
-            )
-          ],
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Close', style: TextStyle(
+                    fontSize: snapshotFont.data.fontSize10
+                  )),
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            );
+          }
         );
       }
     );
@@ -163,9 +179,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Icon(Icons.list, size: 120),
-                            Text('Calling Order', style: TextStyle(
-                              fontSize: snapshotFont.data.fontSize3
-                            ))
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text('Calling Order', style: TextStyle(
+                                  fontSize: snapshotFont.data.fontSize3
+                                )),
+                              ],
+                            )
                           ],
                         ),
                       ),

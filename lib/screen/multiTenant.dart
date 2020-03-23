@@ -155,7 +155,8 @@ class _MultiTenantState extends State<MultiTenant> {
           //defaultImageAsset: '$path/skinpack/gifAnimation.gif',
           outputRect: Rect.fromLTWH(
             0.0, 0.0, 
-            SizeConfig.safeBlockHorizontal * 45, SizeConfig.safeBlockVertical * 47.5
+            SizeConfig.safeBlockHorizontal * 45, 
+            SizeConfig.safeBlockVertical * 46.5
           ),
           imageFit: BoxFit.cover,
           child: NowServingContainer(
@@ -187,7 +188,8 @@ class _MultiTenantState extends State<MultiTenant> {
           defaultImageAsset: 'assets/defaultContainerColor.png',
           outputRect: Rect.fromLTWH(
             0.0, 0.0, 
-            SizeConfig.safeBlockHorizontal * 45, SizeConfig.safeBlockVertical * 45
+            SizeConfig.safeBlockHorizontal * 45, 
+            SizeConfig.safeBlockVertical * 45
           ),
           imageFit: BoxFit.cover,
           child: WaitingQueueContainer(ordersQueue: _ordersQueue)
@@ -240,7 +242,7 @@ class _MultiTenantState extends State<MultiTenant> {
             children: <Widget>[
               Container(
                 width: SizeConfig.safeBlockHorizontal * 48,
-                height: SizeConfig.safeBlockVertical * 95,
+                height: SizeConfig.safeBlockVertical * 93,
                 child: _streamOrdersGridViewTenant()
               ),
               Column(
@@ -296,7 +298,7 @@ class _MultiTenantState extends State<MultiTenant> {
     return Scaffold(
       body: SafeArea(
         child: StreamBuilder(
-          stream: _service.streamOrder(),
+          stream: _service.streamGetOrder(),
           builder: (context, snapshot) {
             if(!snapshot.hasData){
               return Center(

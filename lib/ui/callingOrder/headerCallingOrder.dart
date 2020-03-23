@@ -22,6 +22,9 @@ class HeaderCallingOrder extends StatelessWidget {
         return StreamBuilder<FontSize>(
           stream: blocFontSize.getFontSize.stream,
           builder: (context, snapshotFont) {
+            if(!snapshotFont.hasData){
+              return Container();
+            }
             return Container(
               height: SizeConfig.safeBlockVertical * 34,
               color: Colors.orange,
@@ -29,7 +32,7 @@ class HeaderCallingOrder extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
-                    height: SizeConfig.safeBlockVertical * 30,
+                    height: SizeConfig.safeBlockVertical * 28,
                     width: SizeConfig.safeBlockHorizontal * 35,
                     child: Center(
                       child: Row(
@@ -38,11 +41,11 @@ class HeaderCallingOrder extends StatelessWidget {
                         children: <Widget>[
                           Padding(
                             padding: const EdgeInsets.only(
-                              top: 15,
+                              //top: 15,
                               left: 8.0
                             ),
                             child: Icon(Icons.assessment, 
-                              size: snapshotFont.data.fontSize4
+                              size: snapshotFont.data.fontSize7
                             ),
                           ),
                           Column(
@@ -54,7 +57,7 @@ class HeaderCallingOrder extends StatelessWidget {
                                 ? snapshot.data[0].sourceBatch 
                                 : '--',
                                 style: TextStyle(
-                                  fontSize: snapshotFont.data.fontSize2,
+                                  fontSize: snapshotFont.data.fontSize8,
                                   fontWeight: FontWeight.bold
                                 )
                               ),
@@ -63,7 +66,7 @@ class HeaderCallingOrder extends StatelessWidget {
                                 ? snapshot.data[0].tenantId 
                                 : '--',
                                 style: TextStyle(
-                                  fontSize: snapshotFont.data.fontSize3
+                                  fontSize: snapshotFont.data.fontSize9
                                 )
                               )
                             ],
@@ -127,14 +130,14 @@ class HeaderCallingOrder extends StatelessWidget {
                                     });
                                   },
                                   child: Container(
-                                    height: SizeConfig.safeBlockVertical * 30,
-                                    width: SizeConfig.safeBlockHorizontal * 15,
+                                    height: SizeConfig.safeBlockVertical * 28,
+                                    width: SizeConfig.safeBlockHorizontal * 12,
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: <Widget>[
-                                        Icon(Icons.add, size: snapshotFont.data.fontSize2),
+                                        Icon(Icons.add, size: snapshotFont.data.fontSize6),
                                         Text('New', style: TextStyle(
-                                          fontSize: snapshotFont.data.fontSize4,
+                                          fontSize: snapshotFont.data.fontSize8,
                                           fontWeight: FontWeight.bold
                                         ))
                                       ],
@@ -168,14 +171,14 @@ class HeaderCallingOrder extends StatelessWidget {
                             //-TODO: Function Recall--------------------------------------------
                           },
                           child: Container(
-                            height: SizeConfig.safeBlockVertical * 30,
-                            width: SizeConfig.safeBlockHorizontal * 15,
+                            height: SizeConfig.safeBlockVertical * 28,
+                            width: SizeConfig.safeBlockHorizontal * 12,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Icon(Icons.cancel, size: snapshotFont.data.fontSize2),
+                                Icon(Icons.cancel, size: snapshotFont.data.fontSize6),
                                 Text('Void', style: TextStyle(
-                                  fontSize: snapshotFont.data.fontSize4,
+                                  fontSize: snapshotFont.data.fontSize8,
                                   fontWeight: FontWeight.bold
                                 ))
                               ],
@@ -203,14 +206,14 @@ class HeaderCallingOrder extends StatelessWidget {
                             //-TODO: Function Complete-------------------------------------------
                           },
                           child: Container(
-                            height: SizeConfig.safeBlockVertical * 30,
-                            width: SizeConfig.safeBlockHorizontal * 25,
+                            height: SizeConfig.safeBlockVertical * 28,
+                            width: SizeConfig.safeBlockHorizontal * 20,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Icon(Icons.check, size: snapshotFont.data.fontSize2),
+                                Icon(Icons.check, size: snapshotFont.data.fontSize6),
                                 Text('Complete', style: TextStyle(
-                                  fontSize: snapshotFont.data.fontSize4,
+                                  fontSize: snapshotFont.data.fontSize8,
                                   fontWeight: FontWeight.bold
                                 ))
                               ],

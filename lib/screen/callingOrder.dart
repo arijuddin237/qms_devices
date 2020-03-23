@@ -66,7 +66,6 @@ class _CallingOrderState extends State<CallingOrder> {
                                 );
                               }
                               return HeaderCallingOrder(
-                                //ordersCalling: (calledList.length > 0) ? GroupBy.groupBySourceBatch(calledList[0]).first : null,
                               );
                             } else {
                               return HeaderCallingOrder();
@@ -83,14 +82,14 @@ class _CallingOrderState extends State<CallingOrder> {
                       Column(
                         children: <Widget>[
                           Text('Queueing', style: TextStyle(
-                              fontSize: snapshotFont.data.fontSize4,
+                              fontSize: snapshotFont.data.fontSize8,
                           )),
                           StreamBuilder<Setting>(
                             stream: blocSetting.subject.stream,
                             builder: (context, snapshotSetting) {
                               return Container(
-                                width: SizeConfig.safeBlockHorizontal * 49,
-                                height: SizeConfig.safeBlockVertical * 52,
+                                width: SizeConfig.safeBlockHorizontal * 48.5,
+                                //height: SizeConfig.safeBlockVertical * 48,
                                 child: StreamBuilder<List<List<Order>>>(
                                   stream: blocOrders.ordersQueue.stream,
                                   builder: (context, snapshot){
@@ -128,14 +127,14 @@ class _CallingOrderState extends State<CallingOrder> {
                       Column(
                         children: <Widget>[
                           Text('Called Queue', style: TextStyle(
-                            fontSize: snapshotFont.data.fontSize4
+                            fontSize: snapshotFont.data.fontSize8
                           )),
                           StreamBuilder<Setting>(
                             stream: blocSetting.subject.stream,
                             builder: (context, snapshotSetting) {
                               return Container(
-                                width: SizeConfig.safeBlockHorizontal * 49,
-                                height: SizeConfig.safeBlockVertical * 52,
+                                width: SizeConfig.safeBlockHorizontal * 48.5,
+                                //height: SizeConfig.safeBlockVertical * 48,
                                 child: 
                                   StreamBuilder<List<List<Order>>>(
                                   stream: blocOrders.ordersCalling.stream,

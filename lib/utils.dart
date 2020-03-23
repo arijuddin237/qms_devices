@@ -147,8 +147,35 @@ class GroupBy{
 }
 
 class ResponsiveWidget{
-  static bool isLargeScreen(BuildContext context){
-    return MediaQuery.of(context).size.width > 1000;
+  static bool screenMoreThan1500(BuildContext context){
+    return MediaQuery.of(context).size.width > 1500;
+  }
+  static bool screenMoreThan1300(BuildContext context){
+    return MediaQuery.of(context).size.width > 1300 &&
+    MediaQuery.of(context).size.width < 1500;
+  }
+  static bool screenMoreThan1100(BuildContext context){
+    return MediaQuery.of(context).size.width > 1100 &&
+    MediaQuery.of(context).size.width < 1300;
+  }
+  static bool screenMoreThan900(BuildContext context){
+    return MediaQuery.of(context).size.width > 900 &&
+    MediaQuery.of(context).size.width < 1100;
+  }
+  static bool screenMoreThan700(BuildContext context){
+    return MediaQuery.of(context).size.width > 700 &&
+    MediaQuery.of(context).size.width < 900;
+  }
+  static bool screenMoreThan500(BuildContext context){
+    return MediaQuery.of(context).size.width > 500 &&
+    MediaQuery.of(context).size.width < 700;
+  }
+  static bool screenMoreThan300(BuildContext context){
+    return MediaQuery.of(context).size.width > 300 &&
+    MediaQuery.of(context).size.width < 500;
+  }
+  static bool screenLessThan300(BuildContext context){
+    return MediaQuery.of(context).size.width < 300;
   }
   static bool isMediumScreen(BuildContext context){
     return MediaQuery.of(context).size.width > 500 &&

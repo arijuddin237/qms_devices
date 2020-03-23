@@ -66,7 +66,7 @@ class ListViewQueue extends StatelessWidget {
                             width: SizeConfig.safeBlockHorizontal * 5,
                             child: Text(_sourceBatch[index2][0].sourceBatch,
                               style: TextStyle(
-                                fontSize: snapshotFont.data.fontSize4,
+                                fontSize: snapshotFont.data.fontSize10,
                                 fontWeight: FontWeight.bold
                               )
                             ),
@@ -75,7 +75,7 @@ class ListViewQueue extends StatelessWidget {
                             width: SizeConfig.safeBlockHorizontal * 15,
                             child: Text(_sourceBatch[index2][0].tenantId,
                               style: TextStyle(
-                                fontSize: snapshotFont.data.fontSize5
+                                fontSize: snapshotFont.data.fontSize10
                               )
                             ),
                           )
@@ -91,10 +91,12 @@ class ListViewQueue extends StatelessWidget {
                             height: SizeConfig.safeBlockVertical * 5,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                Icon(Icons.notifications),
-                                Text((calledQueue) ? 'Recall' : 'Call', style: TextStyle(
-                                  fontSize: snapshotFont.data.fontSize5
+                                Icon((calledQueue) ? Icons.cancel : Icons.notifications, 
+                                  size: snapshotFont.data.fontSize10,),
+                                Text((calledQueue) ? 'void' : 'Call', style: TextStyle(
+                                  fontSize: snapshotFont.data.fontSize10
                                 ))
                               ],
                             ),
@@ -106,13 +108,13 @@ class ListViewQueue extends StatelessWidget {
                                 return AlertDialog(
                                   content: Text('Call Order ${_sourceBatch[index2][0].sourceBatch} ?',
                                     style: TextStyle(
-                                      fontSize: snapshotFont.data.fontSize4
+                                      fontSize: snapshotFont.data.fontSize9
                                     )
                                   ),
                                   actions: <Widget>[
                                     FlatButton(
                                       child: Text('Cancel', style: TextStyle(
-                                        fontSize: snapshotFont.data.fontSize5,
+                                        fontSize: snapshotFont.data.fontSize10,
                                         color: Colors.black
                                       )),
                                       onPressed: (){
@@ -121,7 +123,7 @@ class ListViewQueue extends StatelessWidget {
                                     ),
                                     FlatButton(
                                       child: Text('Ok', style: TextStyle(
-                                        fontSize: snapshotFont.data.fontSize5
+                                        fontSize: snapshotFont.data.fontSize10
                                       )),
                                       onPressed: (){
                                         for (var orders in _sourceBatch[index2]) {
