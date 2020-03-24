@@ -103,7 +103,9 @@ class _MultiTenantState extends State<MultiTenant> {
 
   //-Build card tenant-------------------------------------------------------------------
   Widget _buildCardTenant(String sourceBatch, String tenantId){
-    final double itemHeight = ((SizeConfig.safeBlockVertical * 95) - 45) /4;
+    final double itemHeight = ResponsiveWidget.screenMoreThan1500(context)
+      ? ((SizeConfig.safeBlockVertical * 95) - 45) /4
+      : ((SizeConfig.safeBlockVertical * 95) - 20) /4;
     final double itemWidth = SizeConfig.safeBlockHorizontal * 47 / 2;
 
     return Card(
@@ -235,6 +237,7 @@ class _MultiTenantState extends State<MultiTenant> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,

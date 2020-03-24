@@ -89,7 +89,7 @@ class _CallingOrderState extends State<CallingOrder> {
                             builder: (context, snapshotSetting) {
                               return Container(
                                 width: SizeConfig.safeBlockHorizontal * 48.5,
-                                //height: SizeConfig.safeBlockVertical * 48,
+                                height: SizeConfig.safeBlockVertical * 40,
                                 child: StreamBuilder<List<List<Order>>>(
                                   stream: blocOrders.ordersQueue.stream,
                                   builder: (context, snapshot){

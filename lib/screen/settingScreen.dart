@@ -5,14 +5,17 @@ import 'package:archive/archive.dart';
 import 'package:archive/archive_io.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart';
+import 'package:qms_device/bloc/blocFontSize.dart';
 import 'package:qms_device/bloc/blocOrder.dart';
 import 'package:qms_device/bloc/blocSetting.dart';
 import 'package:qms_device/data/databaseHelper.dart';
 import 'package:qms_device/library/libSizeConfig.dart';
+import 'package:qms_device/model/fontSize.dart';
 import 'package:qms_device/model/setting.dart';
 import 'package:qms_device/library/libApps.dart';
 import 'package:qms_device/model/skinPack.dart';
 import 'package:qms_device/service/orderService.dart';
+import 'package:qms_device/utils.dart';
 
 
 class SettingScreen extends StatefulWidget {
@@ -134,16 +137,21 @@ class _SettingScreenState extends State<SettingScreen> {
     }
   }
 
-  Widget rowInputZipFile(){
+  Widget rowInputZipFile(BuildContext context){
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text('Choose Skinpack Multi Tenant Zip', style: TextStyle(
-          fontSize: 20
+          fontSize: ResponsiveWidget.isSmallScreen(context)
+            ? 15 : ResponsiveWidget.isMediumScreen(context)
+            ? 18 : 20
         )),
         Container(
           width: SizeConfig.safeBlockHorizontal * 35,
-          height: SizeConfig.safeBlockVertical * 8,
+          height: ResponsiveWidget.isSmallScreen(context)
+            ? SizeConfig.safeBlockVertical * 12
+            : ResponsiveWidget.isMediumScreen(context)
+            ? SizeConfig.safeBlockVertical * 10 : SizeConfig.safeBlockVertical * 8,
           child: TextField(
             readOnly: true,
             controller: _cntrlZipFile,
@@ -168,16 +176,21 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
-  Widget rowInputSkinpackSingletenant(){
+  Widget rowInputSkinpackSingletenant(BuildContext context){
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text('Choose Skinpack Single Tenant Zip', style: TextStyle(
-          fontSize: 20
+          fontSize: ResponsiveWidget.isSmallScreen(context)
+            ? 15 : ResponsiveWidget.isMediumScreen(context)
+            ? 18 : 20
         )),
         Container(
-          width: SizeConfig.safeBlockHorizontal * 35,
-          height: SizeConfig.safeBlockVertical * 8,
+        width: SizeConfig.safeBlockHorizontal * 35,
+          height: ResponsiveWidget.isSmallScreen(context)
+            ? SizeConfig.safeBlockVertical * 12
+            : ResponsiveWidget.isMediumScreen(context)
+            ? SizeConfig.safeBlockVertical * 10 : SizeConfig.safeBlockVertical * 8,
           child: InkWell(
             child: TextField(
               readOnly: true,
@@ -212,16 +225,21 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
-  Widget rowDropDownQmsType(){
+  Widget rowDropDownQmsType(BuildContext context){
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text('Select QMS Type', style: TextStyle(
-          fontSize: 20
+          fontSize: ResponsiveWidget.isSmallScreen(context)
+            ? 15 : ResponsiveWidget.isMediumScreen(context)
+            ? 18 : 20
         )),
         Container(
-          width: SizeConfig.safeBlockHorizontal * 35,
-          height: SizeConfig.safeBlockVertical * 8,
+          //width: SizeConfig.safeBlockHorizontal * 35,
+          height: ResponsiveWidget.isSmallScreen(context)
+            ? SizeConfig.safeBlockVertical * 12
+            : ResponsiveWidget.isMediumScreen(context)
+            ? SizeConfig.safeBlockVertical * 10 : SizeConfig.safeBlockVertical * 8,
           child: DropdownButton<String>(
             value: _dropdownValue,
             onChanged: (String newValue){
@@ -238,7 +256,9 @@ class _SettingScreenState extends State<SettingScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(value, style: TextStyle(
-                      fontSize: 16
+                      fontSize: ResponsiveWidget.isSmallScreen(context)
+                        ? 15 : ResponsiveWidget.isMediumScreen(context)
+                        ? 18 : 20
                     )),
                   ),
                 ),
@@ -300,12 +320,14 @@ class _SettingScreenState extends State<SettingScreen> {
         );
   }*/
 
-  Widget rowInputTenantId(){
+  Widget rowInputTenantId(BuildContext context){
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text('Tenant ID', style: TextStyle(
-          fontSize: 20
+          fontSize: ResponsiveWidget.isSmallScreen(context)
+            ? 15 : ResponsiveWidget.isMediumScreen(context)
+            ? 18 : 20
         )),
         Form(
           key: _formKeyInputTenantId,
@@ -325,18 +347,23 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
-  Widget rowInputProxyHost(){
+  Widget rowInputProxyHost(BuildContext context){
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text('Proxy Host', style: TextStyle(
-          fontSize: 20
+          fontSize: ResponsiveWidget.isSmallScreen(context)
+            ? 15 : ResponsiveWidget.isMediumScreen(context)
+            ? 18 : 20
         )),
         Form(
           key: _formKeyProxyHost,
           child: Container(
             width: SizeConfig.safeBlockHorizontal * 35,
-            height: SizeConfig.safeBlockVertical * 8,
+            height: ResponsiveWidget.isSmallScreen(context)
+            ? SizeConfig.safeBlockVertical * 12
+            : ResponsiveWidget.isMediumScreen(context)
+            ? SizeConfig.safeBlockVertical * 10 : SizeConfig.safeBlockVertical * 8,
             child: TextFormField(
               controller: _cntrlProxyHost,
               decoration: InputDecoration(
@@ -356,16 +383,21 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
-  Widget rowInputOrderProxyPort(){
+  Widget rowInputOrderProxyPort(BuildContext context){
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text('Orders Proxy Port', style: TextStyle(
-          fontSize: 20
+          fontSize: ResponsiveWidget.isSmallScreen(context)
+            ? 15 : ResponsiveWidget.isMediumScreen(context)
+            ? 18: 20
         )),
         Container(
           width: SizeConfig.safeBlockHorizontal * 35,
-          height: SizeConfig.safeBlockVertical * 8,
+          height: ResponsiveWidget.isSmallScreen(context)
+            ? SizeConfig.safeBlockVertical * 12
+            : ResponsiveWidget.isMediumScreen(context)
+            ? SizeConfig.safeBlockVertical * 10 : SizeConfig.safeBlockVertical * 8,
           child: Form(
             key: _formKeyOrdersProxyPort,
             child: TextFormField(
@@ -382,6 +414,51 @@ class _SettingScreenState extends State<SettingScreen> {
               },
             ),
           ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildAppBar(BuildContext contextApps){
+    return AppBar(
+      title: Text('Settings'),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.save),
+          onPressed: (){
+            if(_formKeyProxyHost.currentState.validate() && _formKeyOrdersProxyPort.currentState.validate()){
+              OrderService().initialize();
+              blocOrders.clearBloc();
+              _deleteImage().then((data){
+                showDialog(
+                  context: contextApps,
+                  builder: (BuildContext context){
+                    return AlertDialog(
+                      content: Row(
+                        children: <Widget>[
+                          Text('Success change settings',
+                            style: TextStyle(
+                              fontSize: ResponsiveWidget.isSmallScreen(contextApps)
+                                ? 15 : ResponsiveWidget.isMediumScreen(contextApps)
+                                ? 18 : 20
+                            ),
+                          )
+                        ],
+                      ),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text('Close'),
+                          onPressed: (){
+                            Navigator.pop(context);
+                          },
+                        )
+                      ],
+                    );
+                  }
+                );
+              });
+            }
+          },
         )
       ],
     );
@@ -406,100 +483,50 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        title: Text('Setting'),
-      ),
+      appBar: _buildAppBar(context),
       body: ListView(
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: rowInputTenantId(),
+            child: rowInputTenantId(context),
           ),
           Divider(
             color: Colors.black,
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: rowDropDownQmsType(),
+            child: rowDropDownQmsType(context),
           ),
           Divider(
             color: Colors.black
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: rowInputZipFile(),
+            child: rowInputZipFile(context),
           ),
           Divider(
             color: Colors.black,
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: rowInputSkinpackSingletenant(),
+            child: rowInputSkinpackSingletenant(context),
           ),
           Divider(
             color: Colors.black,
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: rowInputProxyHost(),
+            child: rowInputProxyHost(context),
           ),
           Divider(
             color: Colors.black
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: rowInputOrderProxyPort(),
+            child: rowInputOrderProxyPort(context),
           )
         ],
       ),
-      floatingActionButton: RaisedButton(
-        color: Colors.orange,
-        child: Container(
-          width: SizeConfig.safeBlockHorizontal * 30,
-          height: SizeConfig.safeBlockVertical * 5,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text('Save Setting', style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold
-              )),
-            ],
-          ),
-        ),
-        onPressed: (){
-          if(_formKeyProxyHost.currentState.validate() && _formKeyOrdersProxyPort.currentState.validate()){
-            OrderService().initialize();
-            blocOrders.clearBloc();
-            _deleteImage().then((data){
-              showDialog(
-                context: context,
-                builder: (BuildContext context){
-                  return AlertDialog(
-                    content: Row(
-                      children: <Widget>[
-                        Text('Success change settings', style: TextStyle(
-                          fontSize: 25
-                        )),
-                      ],
-                    ),
-                    actions: <Widget>[
-                      FlatButton(
-                        child: Text('Close'),
-                        onPressed: (){
-                        Navigator.pop(context);
-                        },
-                      )
-                    ],
-                  );
-                }
-              );
-            });
-          }
-        },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

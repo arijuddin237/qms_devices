@@ -1,9 +1,11 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:qms_device/bloc/blocFontSize.dart';
 import 'package:qms_device/bloc/blocOrder.dart';
 import 'package:qms_device/bloc/blocSetting.dart';
 import 'package:qms_device/library/libApps.dart';
 import 'package:qms_device/library/libSizeConfig.dart';
+import 'package:qms_device/model/fontSize.dart';
 import 'package:qms_device/model/setting.dart';
 import 'package:qms_device/protos/orders.pb.dart';
 import 'package:qms_device/service/orderService.dart';
@@ -69,31 +71,39 @@ class _SingleTenantState extends State<SingleTenant> {
       itemBuilder: (context, index){
         var _mapSourceBatch = groupBy(orders[index], (obj) => obj.sourceBatch);
         var _sourceBatch = _mapSourceBatch.values.toList();
-        return ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: _sourceBatch.length,
-          itemBuilder: (context, index2){
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                FutureBuilder(
-                  future: TextureImage.textureText(
-                    path: pathFont,
-                    textStyle: TextStyle(
-                      fontSize: 50
+        return StreamBuilder<FontSize>(
+          stream: blocFontSize.getFontSize.stream,
+          builder: (context, snapshotFont) {
+            if(!snapshotFont.hasData){
+              return Container();
+            }
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: _sourceBatch.length,
+              itemBuilder: (context, index2){
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    FutureBuilder(
+                      future: TextureImage.textureText(
+                        path: pathFont,
+                        textStyle: TextStyle(
+                          fontSize: snapshotFont.data.fontSize9
+                        )
+                      ),
+                      builder: (context, snapshot){
+                        return Text('- '+_sourceBatch[index2][0].sourceBatch,
+                          style: (snapshot.hasData) ? snapshot.data : TextStyle(
+                            fontSize: snapshotFont.data.fontSize9
+                          ));
+                      },
                     )
-                  ),
-                  builder: (context, snapshot){
-                    return Text('- '+_sourceBatch[index2][0].sourceBatch,
-                      style: (snapshot.hasData) ? snapshot.data : TextStyle(
-                        fontSize: 50
-                      ));
-                  },
-                )
-              ],
+                  ],
+                );
+              },
             );
-          },
+          }
         );
       },
     );
@@ -112,49 +122,61 @@ class _SingleTenantState extends State<SingleTenant> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  //color: Colors.transparent,
-                  width: SizeConfig.safeBlockHorizontal * 30,
-                  height: SizeConfig.safeBlockVertical * 15,
-                ),
-                StreamBuilder<Setting>(
-                  stream: blocSetting.subject.stream,
-                  builder: (context, snapshotSetting) {
-                    if(!snapshotSetting.hasData){
-                      return Container();
-                    }
-                    return FutureBuilder(
-                      future: TextureImage.checkFile(
-                        pathImage: '$path/skinpackSingleTenant/${snapshotSetting.data.tenantId}.png',
-                        widget: _containerLogo(),
-                        exceptionWidget: Text(snapshotSetting.data.tenantId, style: TextStyle(
-                          fontSize: 45
-                        )),
-                        outputRect: Rect.fromLTWH(
-                          0.0, 0.0,
-                          SizeConfig.safeBlockHorizontal *25,
-                          SizeConfig.safeBlockVertical * 15  
-                        ),
-                        boxFit: BoxFit.cover
-                      ),
-                      builder: (context, snapshot){
-                        if(snapshot.hasData){
-                          return snapshot.data;
-                        } else {
-                          return Text(snapshotSetting.data.tenantId, style: TextStyle(
-                            fontSize: 45
-                          ));
+          StreamBuilder<FontSize>(
+            stream: blocFontSize.getFontSize.stream,
+            builder: (context, snapshotFont) {
+              if(!snapshotFont.hasData){
+                return Container();
+              }
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Stack(
+                  children: <Widget>[
+                    Container(
+                      //color: Colors.transparent,
+                      width: SizeConfig.safeBlockHorizontal * 30,
+                      height: SizeConfig.safeBlockVertical * 15,
+                    ),
+                    StreamBuilder<Setting>(
+                      stream: blocSetting.subject.stream,
+                      builder: (context, snapshotSetting) {
+                        if(!snapshotSetting.hasData){
+                          return Container();
                         }
-                      },
-                    );
-                  }
+                        return FutureBuilder(
+                          future: TextureImage.checkFile(
+                            pathImage: '$path/skinpackSingleTenant/${snapshotSetting.data.tenantId}.png',
+                            widget: _containerLogo(),
+                            exceptionWidget: Text(snapshotSetting.data.tenantId, style: TextStyle(
+                              fontSize: ResponsiveWidget.isSmallScreen(context)
+                                ? 20 : ResponsiveWidget.isMediumScreen(context)
+                                ? 30 : 45
+                            )),
+                            outputRect: Rect.fromLTWH(
+                              0.0, 0.0,
+                              SizeConfig.safeBlockHorizontal *25,
+                              SizeConfig.safeBlockVertical * 15  
+                            ),
+                            boxFit: BoxFit.cover
+                          ),
+                          builder: (context, snapshot){
+                            if(snapshot.hasData){
+                              return snapshot.data;
+                            } else {
+                              return Text(snapshotSetting.data.tenantId, style: TextStyle(
+                                fontSize: ResponsiveWidget.isSmallScreen(context)
+                                ? 20 : ResponsiveWidget.isMediumScreen(context)
+                                ? 30 : 45
+                              ));
+                            }
+                          },
+                        );
+                      }
+                    )
+                  ],
                 )
-              ],
-            )
+              );
+            }
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,12 +184,46 @@ class _SingleTenantState extends State<SingleTenant> {
             children: <Widget>[
               FutureBuilder(
                 future: TextureImage.textureContainer(
+                  path: _pathQueueColorBack,
+                  defaultImageAsset: 'assets/defaultContainerColor.png',
+                  outputRect: Rect.fromLTWH(
+                    0.0, 0.0, 
+                    SizeConfig.safeBlockHorizontal * 48,
+                    SizeConfig.safeBlockVertical * 79
+                  ),
+                  imageFit: BoxFit.cover,
+                  child: ContainerSingleTenant(
+                    widgetStream: _streamBlocOrders(
+                      streamOrders: blocOrders.ordersQueue.stream,
+                      pathFont: _pathQueueColorFront
+                    ),
+                    text: 'WAITING QUEUE',
+                    pathImageFront: _pathQueueColorFront,
+                  )
+                ),
+                builder: (context, snapshot){
+                  if(snapshot.hasData){
+                    return snapshot.data;
+                  } else {
+                    return ContainerSingleTenant(
+                      widgetStream: _streamBlocOrders(
+                        streamOrders: blocOrders.ordersQueue.stream,
+                        pathFont: _pathQueueColorFront
+                      ),
+                      text: 'WAITING QUEUE',
+                      pathImageFront: _pathQueueColorFront,
+                    );
+                  }
+                },
+              ),
+              FutureBuilder(
+                future: TextureImage.textureContainer(
                   path: _pathReadyColorBack,
                   defaultImageAsset: 'assets/defaultContainerColor.png',
                   outputRect: Rect.fromLTWH(
                     0.0, 0.0, 
                     SizeConfig.safeBlockHorizontal * 48, 
-                    SizeConfig.safeBlockVertical * 80
+                    SizeConfig.safeBlockVertical * 79
                   ),
                   imageFit: BoxFit.cover,
                   child: ContainerSingleTenant(
@@ -194,40 +250,6 @@ class _SingleTenantState extends State<SingleTenant> {
                   }
                 },
               ),
-              FutureBuilder(
-                future: TextureImage.textureContainer(
-                  path: _pathQueueColorBack,
-                  defaultImageAsset: 'assets/defaultContainerColor.png',
-                  outputRect: Rect.fromLTWH(
-                    0.0, 0.0, 
-                    SizeConfig.safeBlockHorizontal * 48,
-                    SizeConfig.safeBlockVertical * 80
-                  ),
-                  imageFit: BoxFit.cover,
-                  child: ContainerSingleTenant(
-                    widgetStream: _streamBlocOrders(
-                      streamOrders: blocOrders.ordersQueue.stream,
-                      pathFont: _pathQueueColorFront
-                    ),
-                    text: 'WAITING QUEUE',
-                    pathImageFront: _pathQueueColorFront,
-                  )
-                ),
-                builder: (context, snapshot){
-                  if(snapshot.hasData){
-                    return snapshot.data;
-                  } else {
-                    return ContainerSingleTenant(
-                      widgetStream: _streamBlocOrders(
-                        streamOrders: blocOrders.ordersQueue.stream,
-                        pathFont: _pathQueueColorFront
-                      ),
-                      text: 'WAITING QUEUE',
-                      pathImageFront: _pathQueueColorFront,
-                    );
-                  }
-                },
-              )
             ],
           )
         ],
@@ -240,7 +262,7 @@ class _SingleTenantState extends State<SingleTenant> {
     return Scaffold(
       body: SafeArea(
         child: StreamBuilder(
-          stream: _service.streamOrder(),
+          stream: _service.streamGetOrder(),
           builder: (context, snapshot) {
             if(snapshot.connectionState != ConnectionState.done){
               return Center(

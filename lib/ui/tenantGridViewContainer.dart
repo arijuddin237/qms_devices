@@ -49,7 +49,7 @@ class TenantGridViewContainer extends StatelessWidget {
                     Container(
                       color: Colors.transparent,
                       width: SizeConfig.safeBlockHorizontal * 25,
-                      height: SizeConfig.safeBlockVertical * 13,
+                      height: SizeConfig.safeBlockVertical * 10,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,

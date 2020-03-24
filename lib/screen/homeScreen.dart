@@ -80,6 +80,69 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void _showModalBottomSheet(){
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (BuildContext context){
+        return Container(
+          child: Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Form(
+                    key: _formKey,
+                    child: TextFormField(
+                      obscureText: true,
+                      controller: _cnrtlPassword,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Password'
+                      ),
+                      validator: (value){
+                        if(value != _password && value.length > 0){
+                          _cnrtlPassword.text = '';
+                          return 'Wrong Password';
+                        } else if(value.length == 0){
+                          return 'Empty Password';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      RaisedButton(
+                        elevation: 0.0,
+                        color: Colors.orange,
+                        child: Text('Process'),
+                        onPressed: (){
+                          if(_formKey.currentState.validate()){
+                            _cnrtlPassword.text = '';
+                            Navigator.pop(context);
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => SettingScreen()
+                            ));
+                          }
+                        },
+                      )
+                    ],
+                  )
+                ],
+              ),
+            )
+          ),
+        );
+      }
+    );
+  }
+
   void _showDialogAlert(){
     showDialog(
       context: context,
@@ -216,7 +279,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       onTap: (){
-                        _showDialogPassword();
+                        _showModalBottomSheet();
                       },
                     )
                   ],

@@ -8,6 +8,7 @@ import 'package:qms_device/model/setting.dart';
 import 'package:qms_device/model/sourceBatch.dart';
 import 'package:qms_device/protos/orders.pb.dart';
 import 'package:qms_device/service/orderService.dart';
+import 'package:qms_device/utils.dart';
 
 class HeaderCallingOrder extends StatelessWidget {
   
@@ -152,7 +153,6 @@ class HeaderCallingOrder extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
-                          left: 8.0,
                           right: 8.0
                         ),
                         child: RaisedButton(
@@ -188,8 +188,7 @@ class HeaderCallingOrder extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
-                          left: 8.0,
-                          right: 16.0,
+                          right: 8.0,
                         ),
                         child: RaisedButton(
                           color: Colors.white,
@@ -207,7 +206,11 @@ class HeaderCallingOrder extends StatelessWidget {
                           },
                           child: Container(
                             height: SizeConfig.safeBlockVertical * 28,
-                            width: SizeConfig.safeBlockHorizontal * 20,
+                            width: ResponsiveWidget.isSmallScreen(context)
+                              ? SizeConfig.safeBlockHorizontal * 18
+                              : ResponsiveWidget.isMediumScreen(context)
+                              ? SizeConfig.safeBlockHorizontal * 19
+                              : SizeConfig.safeBlockHorizontal * 20,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
