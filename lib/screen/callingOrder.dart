@@ -65,6 +65,9 @@ class _CallingOrderState extends State<CallingOrder> {
                                   GroupBy.groupBySourceBatch(calledList[0]).first
                                 );
                               }
+                              if(calledList.length == 0){
+                                blocOrders.addHeaderCalling(List<Order>());
+                              }
                               return HeaderCallingOrder(
                               );
                             } else {
@@ -89,7 +92,11 @@ class _CallingOrderState extends State<CallingOrder> {
                             builder: (context, snapshotSetting) {
                               return Container(
                                 width: SizeConfig.safeBlockHorizontal * 48.5,
-                                height: SizeConfig.safeBlockVertical * 40,
+                                height: ResponsiveWidget.isSmallScreen(context)
+                                  ? SizeConfig.safeBlockVertical * 40
+                                  : ResponsiveWidget.isMediumScreen(context)
+                                  ? SizeConfig.safeBlockVertical * 40
+                                  : SizeConfig.safeBlockVertical * 50,
                                 child: StreamBuilder<List<List<Order>>>(
                                   stream: blocOrders.ordersQueue.stream,
                                   builder: (context, snapshot){
@@ -134,7 +141,11 @@ class _CallingOrderState extends State<CallingOrder> {
                             builder: (context, snapshotSetting) {
                               return Container(
                                 width: SizeConfig.safeBlockHorizontal * 48.5,
-                                //height: SizeConfig.safeBlockVertical * 48,
+                                height: ResponsiveWidget.isSmallScreen(context)
+                                  ? SizeConfig.safeBlockVertical * 40
+                                  : ResponsiveWidget.isMediumScreen(context)
+                                  ? SizeConfig.safeBlockVertical * 40
+                                  : SizeConfig.safeBlockVertical * 50,
                                 child: 
                                   StreamBuilder<List<List<Order>>>(
                                   stream: blocOrders.ordersCalling.stream,

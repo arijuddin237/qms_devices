@@ -9,8 +9,9 @@ import 'package:qms_device/utils.dart';
 
 class WaitingQueueContainer extends StatelessWidget {
   final List<List<Order>> ordersQueue;
+  final String queueContainerColorFront;
 
-  const WaitingQueueContainer({Key key, this.ordersQueue}) : super(key: key);
+  const WaitingQueueContainer({Key key, this.ordersQueue, this.queueContainerColorFront}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +23,18 @@ class WaitingQueueContainer extends StatelessWidget {
         }
         return Container(
           width: SizeConfig.safeBlockHorizontal * 45,
-          height: SizeConfig.safeBlockVertical * 45,
+          height: ResponsiveWidget.isSmallScreen(context)
+              ? SizeConfig.safeBlockVertical * 36
+              : ResponsiveWidget.isMediumScreen(context)
+              ? SizeConfig.safeBlockVertical * 39.5
+              : SizeConfig.safeBlockVertical * 45,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: <Widget>[
                 FutureBuilder(
                   future: TextureImage.textureText(
-                    path: '$path/skinpack/queueContainerColorFront.png',
+                    path: queueContainerColorFront,
                     textStyle: TextStyle(
                       fontSize: snapshotFont.data.fontSize9
                     )
@@ -46,11 +51,15 @@ class WaitingQueueContainer extends StatelessWidget {
                 ),
                 FutureBuilder(
                   future: TextureImage.textureContainer(
-                    path: '$path/skinpack/queueContainerColorFront.png',
+                    path: queueContainerColorFront,
                     defaultImageAsset: 'assets/defaultFontColor.png',
                     outputRect: Rect.fromLTWH(
                       0.0, 0.0, 
-                      SizeConfig.safeBlockHorizontal * 44, 
+                      ResponsiveWidget.isSmallScreen(context)
+                        ? SizeConfig.safeBlockHorizontal * 40
+                        : ResponsiveWidget.isMediumScreen(context)
+                        ? SizeConfig.safeBlockHorizontal * 42
+                        : SizeConfig.safeBlockHorizontal * 44, 
                       SizeConfig.safeBlockVertical
                     ),
                     imageFit: BoxFit.cover,
@@ -80,7 +89,7 @@ class WaitingQueueContainer extends StatelessWidget {
                         itemBuilder: (context, index2){
                           return FutureBuilder(
                               future: TextureImage.textureText(
-                                path: '$path/skinpack/queueContainerColorFront.png',
+                                path: queueContainerColorFront,
                                 textStyle: TextStyle(
                                   fontSize: snapshotFont.data.fontSize10
                                 )

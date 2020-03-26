@@ -67,7 +67,7 @@ class DatabaseHelper {
     );
 
     await db.execute(
-      "INSERT INTO setting VALUES('1','${qmsType[0]}','192.168.0.223','50051','50053','')"
+      "INSERT INTO setting VALUES('1','${qmsType[1]}','10.200.200.50','50051','50053','')"
     );
     
     print("Table Created");

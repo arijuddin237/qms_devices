@@ -8,8 +8,9 @@ import 'package:qms_device/utils.dart';
 class TenantGridViewContainer extends StatelessWidget {
   final String sourceBatch;
   final String tenantId;
+  final String tenantCardColorFront;
 
-  const TenantGridViewContainer({Key key, this.sourceBatch, this.tenantId}) : super(key: key);
+  const TenantGridViewContainer({Key key, this.sourceBatch, this.tenantId, this.tenantCardColorFront}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,7 @@ class TenantGridViewContainer extends StatelessWidget {
                               ),
                               exceptionWidget: FutureBuilder(
                                 future: TextureImage.textureText(
-                                  path: '$path/skinpack/tenantCardColorFront.png',
+                                  path: tenantCardColorFront,
                                   textStyle: TextStyle(
                                     fontSize: snapshotFont.data.fontSize10
                                   ),
@@ -100,7 +101,7 @@ class TenantGridViewContainer extends StatelessWidget {
                     ),
                     FutureBuilder(
                       future: TextureImage.textureText(
-                        path: '$path/skinpack/tenantCardColorFront.png',
+                        path: tenantCardColorFront,
                         textStyle: TextStyle(
                           fontSize: snapshotFont.data.fontSize10
                         )

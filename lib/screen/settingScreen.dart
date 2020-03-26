@@ -43,7 +43,8 @@ class _SettingScreenState extends State<SettingScreen> {
   Future _openFileExplorer() async {
     try {
       var file = await FilePicker.getFile(
-        fileExtension: '.zip'
+        type: FileType.CUSTOM,
+        fileExtension: 'zip'
       );
       return file;
     } catch (e) {
@@ -141,7 +142,7 @@ class _SettingScreenState extends State<SettingScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Text('Choose Skinpack Multi Tenant Zip', style: TextStyle(
+        Text('Choose Skinpack zip', style: TextStyle(
           fontSize: ResponsiveWidget.isSmallScreen(context)
             ? 15 : ResponsiveWidget.isMediumScreen(context)
             ? 18 : 20
@@ -269,56 +270,6 @@ class _SettingScreenState extends State<SettingScreen> {
       ],
     );
   }
-
-  /*Widget rowDropdownSelectTenant(){
-        return Container(
-          child: StreamBuilder<List<List<Order>>>(
-            stream: blocOrders.ordersQueue.stream,
-            builder: (context, snapshotOrder){
-              if(!snapshotOrder.hasData){
-                return Container();
-              }
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('Select Tenant ID', style: TextStyle(
-                    fontSize: 20
-                  )),
-                  Container(
-                    width: SizeConfig.safeBlockHorizontal * 35,
-                    height: SizeConfig.safeBlockVertical * 5,
-                    child: StreamBuilder<List<Order>>(
-                      stream: blocDropdownSetting.getTenants.stream,
-                      builder: (context, snapshotDrop){
-                        return DropdownButton<List<Order>>(
-                          value: snapshotDrop.data,
-                          items: snapshotOrder.data.map((value){
-                            return DropdownMenuItem(
-                              value: value,
-                              child: Container(
-                                width: SizeConfig.safeBlockHorizontal * 33,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(value[0].tenantId, style:TextStyle(
-                                    fontSize: 16
-                                  )),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (newValue){
-                            blocDropdownSetting.changeValueDropdown(newValue);
-                          },
-                        );
-                      },
-                    ),
-                  )
-                ],
-              );
-            },
-          ),
-        );
-  }*/
 
   Widget rowInputTenantId(BuildContext context){
     return Row(
@@ -507,13 +458,13 @@ class _SettingScreenState extends State<SettingScreen> {
           Divider(
             color: Colors.black,
           ),
-          Padding(
+          /*Padding(
             padding: const EdgeInsets.all(8.0),
             child: rowInputSkinpackSingletenant(context),
           ),
           Divider(
             color: Colors.black,
-          ),
+          ),*/
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: rowInputProxyHost(context),

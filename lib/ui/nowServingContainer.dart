@@ -8,8 +8,10 @@ import 'package:qms_device/utils.dart';
 class NowServingContainer extends StatelessWidget {
   final String sourceBatch;
   final String tenantId;
+  final String readyContainerColorFront;
+  final String defaultFontColor;
 
-  const NowServingContainer({Key key, this.sourceBatch, this.tenantId}) : super(key: key);
+  const NowServingContainer({Key key, this.sourceBatch, this.tenantId, this.readyContainerColorFront, this.defaultFontColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class NowServingContainer extends StatelessWidget {
               children: <Widget>[
                 FutureBuilder(
                   future: TextureImage.textureText(
-                    path: '$path/skinpack/readyContainerColorFront.png',
+                    path: readyContainerColorFront,
                     textStyle: TextStyle(
                       fontSize: snapshotFont.data.fontSize9
                     )
@@ -47,11 +49,16 @@ class NowServingContainer extends StatelessWidget {
                 ),
                 FutureBuilder(
                   future: TextureImage.textureContainer(
-                    path: '$path/skinpack/readyContainerColorFront.png',
-                    defaultImageAsset: 'assets/defaultFontColor.png',
+                    path: readyContainerColorFront,
+                    defaultImageAsset: defaultFontColor,
                     outputRect: Rect.fromLTWH(
                       0.0, 0.0, 
-                      SizeConfig.safeBlockHorizontal * 44, SizeConfig.safeBlockVertical
+                      ResponsiveWidget.isSmallScreen(context)
+                        ? SizeConfig.safeBlockHorizontal * 40
+                        : ResponsiveWidget.isMediumScreen(context)
+                        ? SizeConfig.safeBlockHorizontal * 42
+                        : SizeConfig.safeBlockHorizontal * 44, 
+                      SizeConfig.safeBlockVertical
                     ),
                     imageFit: BoxFit.cover,
                     child: Container(
@@ -68,7 +75,7 @@ class NowServingContainer extends StatelessWidget {
                 ),
                 FutureBuilder(
                   future: TextureImage.textureText(
-                    path: '$path/skinpack/readyContainerColorFront.png',
+                    path: readyContainerColorFront,
                     textStyle: TextStyle(
                       fontSize: snapshotFont.data.fontSize1
                     )
@@ -90,7 +97,11 @@ class NowServingContainer extends StatelessWidget {
                 Container(
                   color: Colors.white,
                   width: SizeConfig.safeBlockHorizontal * 45,
-                  height: SizeConfig.safeBlockVertical * 15,
+                  height: ResponsiveWidget.isSmallScreen(context)
+                    ? SizeConfig.safeBlockVertical * 13
+                    : ResponsiveWidget.isMediumScreen(context)
+                    ? SizeConfig.safeBlockVertical * 13
+                    : SizeConfig.safeBlockVertical * 15,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,

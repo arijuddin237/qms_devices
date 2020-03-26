@@ -6,6 +6,7 @@ import 'package:qms_device/library/libSizeConfig.dart';
 import 'package:qms_device/model/fontSize.dart';
 import 'package:qms_device/protos/orders.pb.dart';
 import 'package:qms_device/service/orderService.dart';
+import 'package:qms_device/utils.dart';
 
 class ListViewQueue extends StatelessWidget {
   final List<List<Order>> orders;
@@ -57,13 +58,20 @@ class ListViewQueue extends StatelessWidget {
                     children: <Widget>[
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.assessment, size: 40),
+                            child: Icon(Icons.assessment, 
+                              size: snapshotFont.data.fontSize9
+                            ),
                           ),
                           Container(
-                            width: SizeConfig.safeBlockHorizontal * 5,
+                            width: ResponsiveWidget.isSmallScreen(context)
+                              ? SizeConfig.safeBlockHorizontal * 9
+                              : ResponsiveWidget.isMediumScreen(context)
+                              ? SizeConfig.safeBlockHorizontal * 7
+                              : SizeConfig.safeBlockHorizontal * 5,
                             child: Text(_sourceBatch[index2][0].sourceBatch,
                               style: TextStyle(
                                 fontSize: snapshotFont.data.fontSize10,
@@ -72,7 +80,11 @@ class ListViewQueue extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            width: SizeConfig.safeBlockHorizontal * 15,
+                            width: ResponsiveWidget.isSmallScreen(context)
+                              ? SizeConfig.safeBlockHorizontal * 15
+                              : ResponsiveWidget.isMediumScreen(context)
+                              ? SizeConfig.safeBlockHorizontal * 17
+                              : SizeConfig.safeBlockHorizontal * 18,
                             child: Text(_sourceBatch[index2][0].tenantId,
                               style: TextStyle(
                                 fontSize: snapshotFont.data.fontSize10
@@ -81,13 +93,19 @@ class ListViewQueue extends StatelessWidget {
                           )
                         ],
                       ),
-                      Padding(
+                      calledQueue
+                      ? Container()
+                      : Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: RaisedButton(
                           elevation: 0.0,
                           color: Colors.orange,
                           child: Container(
-                            width: SizeConfig.safeBlockHorizontal * 7,
+                            width: ResponsiveWidget.isSmallScreen(context)
+                              ? SizeConfig.safeBlockHorizontal * 8
+                              : ResponsiveWidget.isMediumScreen(context)
+                              ? SizeConfig.safeBlockHorizontal * 9
+                              : SizeConfig.safeBlockHorizontal * 7,
                             height: SizeConfig.safeBlockVertical * 5,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,

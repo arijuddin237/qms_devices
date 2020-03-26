@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:qms_device/bloc/blocFontSize.dart';
 import 'package:qms_device/bloc/blocOrder.dart';
 import 'package:qms_device/library/libSizeConfig.dart';
 import 'package:qms_device/library/libApps.dart';
+import 'package:qms_device/model/fontSize.dart';
 import 'package:qms_device/protos/orders.pb.dart';
 import 'package:qms_device/service/orderService.dart';
 import 'package:qms_device/ui/nowServingContainer.dart';
@@ -17,10 +19,26 @@ class MultiTenant extends StatefulWidget {
 
 class _MultiTenantState extends State<MultiTenant> {
   OrderService _service = OrderService();
+  String _pathAssetDefaultContainerColor = 'assets/defaultContainerColor.png';
+  String _pathAssetDefaultBackgroundImage = 'assets/defaultBackgroundImage.png';
+  String _pathAssetDefaultFontColor = 'assets/defaultFontColor.png';
+  String _pathTenantColorBack = '$path/skinpack/MTtenantCardColorBack.png';
+  String _pathTenantColorFront = '$path/skinpack/MTtenantCardColorFront.png';
+  String _pathReadyContainerColorBack = '$path/skinpack/MTreadyContainerColorBack.png';
+  String _pathReadyContainerColorFront = '$path/skinpack/MTreadyContainerColorFront.png';
+  String _pathQueueContainerColorBack = '$path/skinpack/MTqueueContainerColorBack.png';
+  String _pathQueueContainerColorFront = '$path/skinpack/MTqueueContainerColorFront.png';
+  String _pathRuningTextBack = '$path/skinpack/MTruningTextBack';
+  String _pathRuningTextFront = '$path/skinpack/MTruningTextFront';
+  String _pathBackground = '$path/skinpack/MTbackground.jpg';
 
   //-Stream Orders from BLoC and filter by tenantId, status = ready----------------------
   Widget _streamOrdersGridViewTenant(){
-    final double itemHeight = SizeConfig.safeBlockVertical * 98 /4;
+    final double itemHeight = ResponsiveWidget.isSmallScreen(context)
+      ? SizeConfig.safeBlockVertical * 90 /4 
+      : ResponsiveWidget.isMediumScreen(context)
+      ? SizeConfig.safeBlockVertical * 93 /4
+      : SizeConfig.safeBlockVertical * 98 /4;
     final double itemWidth = SizeConfig.safeBlockHorizontal * 50 / 2;
 
     return StreamBuilder<List<List<Order>>>(
@@ -105,7 +123,7 @@ class _MultiTenantState extends State<MultiTenant> {
   Widget _buildCardTenant(String sourceBatch, String tenantId){
     final double itemHeight = ResponsiveWidget.screenMoreThan1500(context)
       ? ((SizeConfig.safeBlockVertical * 95) - 45) /4
-      : ((SizeConfig.safeBlockVertical * 95) - 20) /4;
+      : ((SizeConfig.safeBlockVertical * 95) - 40) /4;
     final double itemWidth = SizeConfig.safeBlockHorizontal * 47 / 2;
 
     return Card(
@@ -114,9 +132,9 @@ class _MultiTenantState extends State<MultiTenant> {
         future: TextureImage.textureContainer(
           path: (sourceBatch != null) ? 
             '$path/skinpack/$tenantId.png' : 
-            '$path/skinpack/tenantCardColorBack.png',
-          defaultImageAsset: 'assets/defaultContainerColor.png',
-          defaultImagePath: '$path/skinpack/tenantCardColorBack.png',
+            _pathTenantColorBack,
+          defaultImageAsset: _pathAssetDefaultContainerColor,
+          defaultImagePath: _pathTenantColorBack,
           outputRect: Rect.fromLTWH(
             0.0, 0.0, 
             itemWidth, itemHeight
@@ -125,6 +143,7 @@ class _MultiTenantState extends State<MultiTenant> {
           child: TenantGridViewContainer(
             sourceBatch: sourceBatch,
             tenantId: tenantId,
+            tenantCardColorFront: _pathTenantColorFront,
           )
         ),
         builder: (context, snapshot){
@@ -137,6 +156,7 @@ class _MultiTenantState extends State<MultiTenant> {
               child: TenantGridViewContainer(
                 sourceBatch: sourceBatch,
                 tenantId: tenantId,
+                tenantCardColorFront: _pathTenantColorFront,
               )
             );
           }
@@ -151,8 +171,8 @@ class _MultiTenantState extends State<MultiTenant> {
       elevation: 0.0,
       child: FutureBuilder(
         future: TextureImage.textureContainer(
-          path: '$path/skinpack/readyContainerColorBack.png',
-          defaultImageAsset: 'assets/defaultContainerColor.png',
+          path: _pathReadyContainerColorBack,
+          defaultImageAsset: _pathAssetDefaultContainerColor,
           //path: "$path/skinpack/gifAnimation.gif",
           //defaultImageAsset: '$path/skinpack/gifAnimation.gif',
           outputRect: Rect.fromLTWH(
@@ -164,6 +184,8 @@ class _MultiTenantState extends State<MultiTenant> {
           child: NowServingContainer(
             sourceBatch: sourceBatch,
             tenantId: tenantId,
+            readyContainerColorFront: _pathReadyContainerColorFront,
+            defaultFontColor: _pathAssetDefaultFontColor,
           )
         ),
         builder: (context, snapshot){
@@ -173,6 +195,8 @@ class _MultiTenantState extends State<MultiTenant> {
             return NowServingContainer(
               sourceBatch: sourceBatch,
               tenantId: tenantId,
+              readyContainerColorFront: _pathReadyContainerColorFront,
+              defaultFontColor: _pathAssetDefaultFontColor,
             );
           }
         },
@@ -186,21 +210,31 @@ class _MultiTenantState extends State<MultiTenant> {
       elevation: 0,
       child: FutureBuilder(
         future: TextureImage.textureContainer(
-          path: '$path/skinpack/queueContainerColorBack.png',
-          defaultImageAsset: 'assets/defaultContainerColor.png',
+          path: _pathQueueContainerColorBack,
+          defaultImageAsset: _pathAssetDefaultContainerColor,
           outputRect: Rect.fromLTWH(
             0.0, 0.0, 
             SizeConfig.safeBlockHorizontal * 45, 
-            SizeConfig.safeBlockVertical * 45
+            ResponsiveWidget.isSmallScreen(context)
+              ? SizeConfig.safeBlockVertical * 36
+              : ResponsiveWidget.isMediumScreen(context)
+              ? SizeConfig.safeBlockVertical * 39.5
+              : SizeConfig.safeBlockVertical * 45
           ),
           imageFit: BoxFit.cover,
-          child: WaitingQueueContainer(ordersQueue: _ordersQueue)
+          child: WaitingQueueContainer(
+            ordersQueue: _ordersQueue,
+            queueContainerColorFront: _pathQueueContainerColorFront,
+          )
         ),
         builder: (context, snapshot){
           if(snapshot.hasData){
             return snapshot.data;
           } else {
-            return WaitingQueueContainer(ordersQueue: _ordersQueue);
+            return WaitingQueueContainer(
+              ordersQueue: _ordersQueue,
+              queueContainerColorFront: _pathQueueContainerColorFront,
+            );
           }
         },
       )
@@ -208,28 +242,36 @@ class _MultiTenantState extends State<MultiTenant> {
   }
 
   Widget _runningText(){
-    return FutureBuilder(
-      future: TextureImage.textureText(
-        path: '$path/skinpack/readyContainerColorFront.png',
-        textStyle: TextStyle(
-          fontSize: 20
-        )
-      ),
-      builder: (context, snapshot){
-        if(snapshot.hasData){
-          return ScrollingText(
-            text: 'this is scrolling text...',
-            textStyle: snapshot.data,
-          );
-        } else {
-          return ScrollingText(
-            text: 'this is scrolling text...',
-            textStyle: TextStyle(
-              fontSize: 20
-            ),
-          );
+    return StreamBuilder<FontSize>(
+      stream: blocFontSize.getFontSize.stream,
+      builder: (context, snapshotFont) {
+        if(!snapshotFont.hasData){
+          return Container();
         }
-      },
+        return FutureBuilder(
+          future: TextureImage.textureText(
+            path: _pathRuningTextFront,
+            textStyle: TextStyle(
+              fontSize: snapshotFont.data.fontSize10
+            )
+          ),
+          builder: (context, snapshot){
+            if(snapshot.hasData){
+              return ScrollingText(
+                text: 'some sample text',
+                textStyle: snapshot.data,
+              );
+            } else {
+              return ScrollingText(
+                text: 'some sample text',
+                textStyle: TextStyle(
+                  fontSize: snapshotFont.data.fontSize10
+                ),
+              );
+            }
+          },
+        );
+      }
     );
   }
 
@@ -244,8 +286,13 @@ class _MultiTenantState extends State<MultiTenant> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Container(
+                //color: Colors.blue,
                 width: SizeConfig.safeBlockHorizontal * 48,
-                height: SizeConfig.safeBlockVertical * 93,
+                height: ResponsiveWidget.isSmallScreen(context)
+                  ? SizeConfig.safeBlockVertical * 90
+                  : ResponsiveWidget.isMediumScreen(context)
+                  ? SizeConfig.safeBlockVertical * 90
+                  : SizeConfig.safeBlockVertical * 93,
                 child: _streamOrdersGridViewTenant()
               ),
               Column(
@@ -259,16 +306,16 @@ class _MultiTenantState extends State<MultiTenant> {
           ),
           FutureBuilder(
             future: TextureImage.textureContainer(
-              path: '$path/skinpack/readyContainerColorBack.png',
-              defaultImageAsset: 'assets/defaultContainerColor.png',
+              path: _pathRuningTextBack,
+              defaultImageAsset: _pathAssetDefaultContainerColor,
               outputRect: Rect.fromLTWH(
                 0, 0, 
                 SizeConfig.safeBlockHorizontal * 99, 
-                SizeConfig.safeBlockVertical * 3
+                SizeConfig.safeBlockVertical * 5
               ),
               imageFit: BoxFit.cover,
               child: Container(
-                height: SizeConfig.safeBlockVertical * 3,
+                height: SizeConfig.safeBlockVertical * 4,
                 width: SizeConfig.safeBlockHorizontal * 100,
                 child: _runningText()
               )
@@ -278,7 +325,7 @@ class _MultiTenantState extends State<MultiTenant> {
                 return snapshot.data;
               } else {
                 return Container(
-                  height: SizeConfig.safeBlockVertical * 3,
+                  height: SizeConfig.safeBlockVertical * 4,
                   width: SizeConfig.safeBlockHorizontal * 100,
                   child: _runningText()
                 );
@@ -316,8 +363,8 @@ class _MultiTenantState extends State<MultiTenant> {
             }
             return FutureBuilder(
               future: TextureImage.textureContainer(
-                path: '$path/skinpack/background.jpg',
-                defaultImageAsset: 'assets/defaultBackgroundImage.png',
+                path: _pathBackground,
+                defaultImageAsset: _pathAssetDefaultBackgroundImage,
                 outputRect: Rect.fromLTRB(
                   0.0, 0.0, 
                   SizeConfig.safeBlockHorizontal * 100, SizeConfig.safeBlockVertical * 100

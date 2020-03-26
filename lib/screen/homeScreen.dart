@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _cnrtlPassword = TextEditingController();
   //String qmsType;
-  final String _password = 'testPassword';
+  final String _password = '123456';
 
   void _showDialogPassword(){
     _cnrtlPassword.text = "";
@@ -112,6 +112,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           return 'Empty Password';
                         }
                         return null;
+                      },
+                      onFieldSubmitted: (value){
+                        if(_formKey.currentState.validate()){
+                          _cnrtlPassword.text = '';
+                          Navigator.pop(context);
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => SettingScreen()
+                          ));
+                        }
                       },
                     ),
                   ),
@@ -211,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Icon(Icons.assessment, size: 120),
+                            Icon(Icons.people, size: 120),
                             Text('QMS', style: TextStyle(
                               fontSize: snapshotFont.data.fontSize2
                             ))

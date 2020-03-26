@@ -19,10 +19,12 @@ class SingleTenant extends StatefulWidget {
 
 class _SingleTenantState extends State<SingleTenant> {
   OrderService _service = OrderService();
-  String _pathReadyColorBack = '$path/skinpackSingleTenant/readyContainerColorBack.png';
-  String _pathReadyColorFront = '$path/skinpackSingleTenant/readyContainerColorFront.png';
-  String _pathQueueColorBack = '$path/skinpackSingleTenant/queueContainerColorBack.png';
-  String _pathQueueColorFront = '$path/skinpackSingleTenant/queueContainerColorFront.png';
+  String _pathAssetDefaultBackgroundImage = 'assets/defaultBackgroundImage.png';
+  String _pathReadyColorBack = '$path/skinpack/STreadyContainerColorBack.png';
+  String _pathReadyColorFront = '$path/skinpack/STreadyContainerColorFront.png';
+  String _pathQueueColorBack = '$path/skinpack/STqueueContainerColorBack.png';
+  String _pathQueueColorFront = '$path/skinpack/STqueueContainerColorFront.png';
+  String _pathBackground = '$path/skinpack/STbackground.jpg';
 
   Widget _streamBlocOrders({
     @required Stream<List<List<Order>>> streamOrders,
@@ -145,7 +147,7 @@ class _SingleTenantState extends State<SingleTenant> {
                         }
                         return FutureBuilder(
                           future: TextureImage.checkFile(
-                            pathImage: '$path/skinpackSingleTenant/${snapshotSetting.data.tenantId}.png',
+                            pathImage: '$path/skinpack/${snapshotSetting.data.tenantId}.png',
                             widget: _containerLogo(),
                             exceptionWidget: Text(snapshotSetting.data.tenantId, style: TextStyle(
                               fontSize: ResponsiveWidget.isSmallScreen(context)
@@ -189,7 +191,11 @@ class _SingleTenantState extends State<SingleTenant> {
                   outputRect: Rect.fromLTWH(
                     0.0, 0.0, 
                     SizeConfig.safeBlockHorizontal * 48,
-                    SizeConfig.safeBlockVertical * 79
+                    ResponsiveWidget.isSmallScreen(context)
+                      ? SizeConfig.safeBlockVertical * 65
+                      : ResponsiveWidget.isMediumScreen(context)
+                      ? SizeConfig.safeBlockVertical * 75
+                      : SizeConfig.safeBlockVertical * 80,
                   ),
                   imageFit: BoxFit.cover,
                   child: ContainerSingleTenant(
@@ -223,7 +229,11 @@ class _SingleTenantState extends State<SingleTenant> {
                   outputRect: Rect.fromLTWH(
                     0.0, 0.0, 
                     SizeConfig.safeBlockHorizontal * 48, 
-                    SizeConfig.safeBlockVertical * 79
+                    ResponsiveWidget.isSmallScreen(context)
+                      ? SizeConfig.safeBlockVertical * 65
+                      : ResponsiveWidget.isMediumScreen(context)
+                      ? SizeConfig.safeBlockVertical * 75
+                      : SizeConfig.safeBlockVertical * 80,
                   ),
                   imageFit: BoxFit.cover,
                   child: ContainerSingleTenant(
@@ -262,7 +272,7 @@ class _SingleTenantState extends State<SingleTenant> {
     return Scaffold(
       body: SafeArea(
         child: StreamBuilder(
-          stream: _service.streamGetOrder(),
+          stream: _service.streamOrder(),
           builder: (context, snapshot) {
             if(snapshot.connectionState != ConnectionState.done){
               return Center(
@@ -277,8 +287,8 @@ class _SingleTenantState extends State<SingleTenant> {
             }
             return FutureBuilder(
               future: TextureImage.textureContainer(
-                path: '$path/skinpackSingleTenant/background.jpg',
-                defaultImageAsset: 'assets/defaultBackgroundImage.png',
+                path: _pathBackground,
+                defaultImageAsset: _pathAssetDefaultBackgroundImage,
                 outputRect: Rect.fromLTWH(
                   0.0, 0.0, 
                   SizeConfig.safeBlockHorizontal * 100, 
