@@ -30,7 +30,7 @@ class DatabaseHelper {
   initDb() async {
     io.Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, "qmsDb.db");
-    var theDb = await openDatabase(path, version: 1, onCreate: _onCreate);
+    var theDb = await openDatabase(path, version: 3, onCreate: _onCreate, onUpgrade: _onUpgrade);
     return theDb;
   }
 
@@ -51,7 +51,7 @@ class DatabaseHelper {
 
     await db.execute(
       "CREATE TABLE setting(id INTEGER, qmsType TEXT, host TEXT," 
-      "ordersPort INTEGER, devicesPort INTEGER, tenantID TEXT)"
+      "ordersPort INTEGER, devicesPort INTEGER, tenantID TEXT, runningText TEXT)"
     );
 
     await db.execute(
@@ -67,10 +67,19 @@ class DatabaseHelper {
     );
 
     await db.execute(
-      "INSERT INTO setting VALUES('1','${qmsType[1]}','10.200.200.50','50051','50053','')"
+      "INSERT INTO setting VALUES('1','${qmsType[1]}','10.200.200.50','50051','50053','','')"
     );
     
     print("Table Created");
+  }
+
+  void _onUpgrade(Database db, int oldVersion, int newVersion){
+    if(oldVersion == 1){
+      db.execute("ALTER TABLE SETTING ADD COLUMN runningText TEXT");
+      db.execute("UPDATE SETTING SET runningText = 'some sample text' WHERE id = '1'");
+    } else if(oldVersion == 2){
+      db.execute("UPDATE SETTING SET runningText = 'some sample text' WHERE id = '1'");
+    }
   }
 
   //-Save order to database--------------------------------------------------------------
@@ -326,7 +335,8 @@ class DatabaseHelper {
           host: setting['host'],
           ordersPort: setting['ordersPort'],
           devicesPort: setting['devicesPort'],
-          tenantId: setting['tenantID']
+          tenantId: setting['tenantID'],
+          runningText: setting['runningText']
         )
       );
     }
@@ -388,7 +398,8 @@ class DatabaseHelper {
     int res = await dbClient.rawUpdate(
       "UPDATE setting SET qmsType = '${setting.qmsType}',"
       "host = '${setting.host}', ordersPort = '${setting.ordersPort}',"
-      "devicesPort = '${setting.devicesPort}', tenantID = '${setting.tenantId}'"
+      "devicesPort = '${setting.devicesPort}', tenantID = '${setting.tenantId}',"
+      "runningText = '${setting.runningText}'"
       "WHERE id = ${setting.id}"
     );
     return res;

@@ -83,7 +83,7 @@ class ListViewQueue extends StatelessWidget {
                             width: ResponsiveWidget.isSmallScreen(context)
                               ? SizeConfig.safeBlockHorizontal * 15
                               : ResponsiveWidget.isMediumScreen(context)
-                              ? SizeConfig.safeBlockHorizontal * 17
+                              ? SizeConfig.safeBlockHorizontal * 19
                               : SizeConfig.safeBlockHorizontal * 18,
                             child: Text(_sourceBatch[index2][0].tenantId,
                               style: TextStyle(

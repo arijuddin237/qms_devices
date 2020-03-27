@@ -28,7 +28,7 @@ class _CallingOrderState extends State<CallingOrder> {
   Widget _mainBody(){
     return SafeArea(
       child: StreamBuilder(
-        stream: _service.streamGetOrder(),
+        stream: _service.streamOrder(),
         builder: (context, snapshot){
           return StreamBuilder<FontSize>(
             stream: blocFontSize.getFontSize.stream,
@@ -133,7 +133,7 @@ class _CallingOrderState extends State<CallingOrder> {
                       ),
                       Column(
                         children: <Widget>[
-                          Text('Called Queue', style: TextStyle(
+                          Text('Queue Called', style: TextStyle(
                             fontSize: snapshotFont.data.fontSize8
                           )),
                           StreamBuilder<Setting>(

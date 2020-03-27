@@ -39,7 +39,8 @@ class _SplashScreenState extends State<SplashScreen> {
           host: data.host,
           ordersPort: data.ordersPort,
           devicesPort: data.devicesPort,
-          tenantId: data.tenantId
+          tenantId: data.tenantId,
+          runningText: data.runningText
         )
       );
       OrderService().initialize();

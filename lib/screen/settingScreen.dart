@@ -38,6 +38,7 @@ class _SettingScreenState extends State<SettingScreen> {
   TextEditingController _cntrlOrderProxyPort = TextEditingController();
   TextEditingController _cntrlDeviceProxyPort = TextEditingController();
   TextEditingController _cntrlTenantId = TextEditingController();
+  TextEditingController _cntrlRunningText = TextEditingController();
   String _dropdownValue;
 
   Future _openFileExplorer() async {
@@ -65,7 +66,8 @@ class _SettingScreenState extends State<SettingScreen> {
         qmsType: _dropdownValue,
         host: _cntrlProxyHost.text,
         ordersPort: int.parse(_cntrlOrderProxyPort.text),
-        tenantId: _cntrlTenantId.text
+        tenantId: _cntrlTenantId.text,
+        runningText: _cntrlRunningText.text
       )
     );
     await _db.updateSetting(
@@ -75,7 +77,8 @@ class _SettingScreenState extends State<SettingScreen> {
         host: _cntrlProxyHost.text,
         ordersPort: int.parse(_cntrlOrderProxyPort.text),
         devicesPort: 0,
-        tenantId: _cntrlTenantId.text
+        tenantId: _cntrlTenantId.text,
+        runningText: _cntrlRunningText.text
       )
     );
     if(_skinPackFile != null){
@@ -370,6 +373,36 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
+  Widget rowInputRunningText(BuildContext context){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text('Running Text', style: TextStyle(
+          fontSize: ResponsiveWidget.isSmallScreen(context)
+            ? 15 : ResponsiveWidget.isMediumScreen(context)
+            ? 18 : 20
+        )),
+        Container(
+          width: SizeConfig.safeBlockHorizontal * 35,
+          height: ResponsiveWidget.isSmallScreen(context)
+            ? SizeConfig.safeBlockVertical * 12
+            : ResponsiveWidget.isMediumScreen(context)
+            ? SizeConfig.safeBlockVertical * 10
+            : SizeConfig.safeBlockVertical * 8,
+          child: Form(
+            child: TextFormField(
+              controller: _cntrlRunningText,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Running Text Value'
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
   Widget _buildAppBar(BuildContext contextApps){
     return AppBar(
       title: Text('Settings'),
@@ -425,6 +458,7 @@ class _SettingScreenState extends State<SettingScreen> {
           _cntrlOrderProxyPort.text = data.ordersPort.toString();
           _cntrlDeviceProxyPort.text = data.devicesPort.toString();
           _cntrlTenantId.text = data.tenantId;
+          _cntrlRunningText.text = data.runningText;
         });
       }
     });
@@ -475,6 +509,13 @@ class _SettingScreenState extends State<SettingScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: rowInputOrderProxyPort(context),
+          ),
+          Divider(
+            color: Colors.black,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: rowInputRunningText(context),
           )
         ],
       ),

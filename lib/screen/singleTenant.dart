@@ -20,10 +20,10 @@ class SingleTenant extends StatefulWidget {
 class _SingleTenantState extends State<SingleTenant> {
   OrderService _service = OrderService();
   String _pathAssetDefaultBackgroundImage = 'assets/defaultBackgroundImage.png';
-  String _pathReadyColorBack = '$path/skinpack/STreadyContainerColorBack.png';
-  String _pathReadyColorFront = '$path/skinpack/STreadyContainerColorFront.png';
-  String _pathQueueColorBack = '$path/skinpack/STqueueContainerColorBack.png';
-  String _pathQueueColorFront = '$path/skinpack/STqueueContainerColorFront.png';
+  String _pathReadyColorBack = '$path/skinpack/STqueueCalledColorBack.png';
+  String _pathReadyColorFront = '$path/skinpack/STqueueCalledColorFront.png';
+  String _pathQueueColorBack = '$path/skinpack/STwaitingQueueColorBack.png';
+  String _pathQueueColorFront = '$path/skinpack/STwaitingQueueColorFront.png';
   String _pathBackground = '$path/skinpack/STbackground.jpg';
 
   Widget _streamBlocOrders({
@@ -147,7 +147,7 @@ class _SingleTenantState extends State<SingleTenant> {
                         }
                         return FutureBuilder(
                           future: TextureImage.checkFile(
-                            pathImage: '$path/skinpack/${snapshotSetting.data.tenantId}.png',
+                            pathImage: '$path/skinpack/${snapshotSetting.data.tenantId}-logo.png',
                             widget: _containerLogo(),
                             exceptionWidget: Text(snapshotSetting.data.tenantId, style: TextStyle(
                               fontSize: ResponsiveWidget.isSmallScreen(context)
@@ -241,7 +241,7 @@ class _SingleTenantState extends State<SingleTenant> {
                       streamOrders: blocOrders.ordersCalling.stream,
                       pathFont: _pathReadyColorFront
                     ),
-                    text: 'READY',
+                    text: 'CALLED QUEUE',
                     pathImageFront: _pathReadyColorFront,
                   )
                 ),
@@ -254,7 +254,7 @@ class _SingleTenantState extends State<SingleTenant> {
                         streamOrders: blocOrders.ordersCalling.stream,
                         pathFont: _pathReadyColorFront
                       ),
-                      text: 'READY',
+                      text: 'CALLED QUEUE',
                       pathImageFront: _pathReadyColorFront,
                     );
                   }

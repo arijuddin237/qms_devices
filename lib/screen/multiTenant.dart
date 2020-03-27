@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:qms_device/bloc/blocFontSize.dart';
 import 'package:qms_device/bloc/blocOrder.dart';
+import 'package:qms_device/bloc/blocSetting.dart';
 import 'package:qms_device/library/libSizeConfig.dart';
 import 'package:qms_device/library/libApps.dart';
 import 'package:qms_device/model/fontSize.dart';
+import 'package:qms_device/model/setting.dart';
 import 'package:qms_device/protos/orders.pb.dart';
 import 'package:qms_device/service/orderService.dart';
 import 'package:qms_device/ui/nowServingContainer.dart';
@@ -24,12 +26,12 @@ class _MultiTenantState extends State<MultiTenant> {
   String _pathAssetDefaultFontColor = 'assets/defaultFontColor.png';
   String _pathTenantColorBack = '$path/skinpack/MTtenantCardColorBack.png';
   String _pathTenantColorFront = '$path/skinpack/MTtenantCardColorFront.png';
-  String _pathReadyContainerColorBack = '$path/skinpack/MTreadyContainerColorBack.png';
-  String _pathReadyContainerColorFront = '$path/skinpack/MTreadyContainerColorFront.png';
-  String _pathQueueContainerColorBack = '$path/skinpack/MTqueueContainerColorBack.png';
-  String _pathQueueContainerColorFront = '$path/skinpack/MTqueueContainerColorFront.png';
-  String _pathRuningTextBack = '$path/skinpack/MTruningTextBack';
-  String _pathRuningTextFront = '$path/skinpack/MTruningTextFront';
+  String _pathReadyContainerColorBack = '$path/skinpack/MTnowServingColorBack.png';
+  String _pathReadyContainerColorFront = '$path/skinpack/MTnowServingColorFront.png';
+  String _pathQueueContainerColorBack = '$path/skinpack/MTwaitingQueueColorBack.png';
+  String _pathQueueContainerColorFront = '$path/skinpack/MTwaitingQueueColorFront.png';
+  String _pathRuningTextBack = '$path/skinpack/MTruningTextBack.png';
+  String _pathRuningTextFront = '$path/skinpack/MTruningTextFront.png';
   String _pathBackground = '$path/skinpack/MTbackground.jpg';
 
   //-Stream Orders from BLoC and filter by tenantId, status = ready----------------------
@@ -248,28 +250,36 @@ class _MultiTenantState extends State<MultiTenant> {
         if(!snapshotFont.hasData){
           return Container();
         }
-        return FutureBuilder(
-          future: TextureImage.textureText(
-            path: _pathRuningTextFront,
-            textStyle: TextStyle(
-              fontSize: snapshotFont.data.fontSize10
-            )
-          ),
-          builder: (context, snapshot){
-            if(snapshot.hasData){
-              return ScrollingText(
-                text: 'some sample text',
-                textStyle: snapshot.data,
-              );
-            } else {
-              return ScrollingText(
-                text: 'some sample text',
+        return StreamBuilder<Setting>(
+          stream: blocSetting.subject.stream,
+          builder: (context, snapshotSetting) {
+            if(!snapshotSetting.hasData){
+              return Container();
+            }
+            return FutureBuilder(
+              future: TextureImage.textureText(
+                path: _pathRuningTextFront,
                 textStyle: TextStyle(
                   fontSize: snapshotFont.data.fontSize10
-                ),
-              );
-            }
-          },
+                )
+              ),
+              builder: (context, snapshot){
+                if(snapshot.hasData){
+                  return ScrollingText(
+                    text: snapshotSetting.data.runningText ?? 'some sample text',
+                    textStyle: snapshot.data,
+                  );
+                } else {
+                  return ScrollingText(
+                    text: snapshotSetting.data.runningText ?? 'some sample text',
+                    textStyle: TextStyle(
+                      fontSize: snapshotFont.data.fontSize10
+                    ),
+                  );
+                }
+              },
+            );
+          }
         );
       }
     );
@@ -348,7 +358,7 @@ class _MultiTenantState extends State<MultiTenant> {
     return Scaffold(
       body: SafeArea(
         child: StreamBuilder(
-          stream: _service.streamGetOrder(),
+          stream: _service.streamOrder(),
           builder: (context, snapshot) {
             if(!snapshot.hasData){
               return Center(

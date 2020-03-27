@@ -1,6 +1,6 @@
 class Setting{
   int id, ordersPort, devicesPort;
-  String qmsType, host, tenantId;
+  String qmsType, host, tenantId, runningText;
 
   Setting({
     this.id, 
@@ -8,7 +8,8 @@ class Setting{
     this.host, 
     this.ordersPort, 
     this.devicesPort,
-    this.tenantId
+    this.tenantId,
+    this.runningText
   });
 
   Setting.fromJson(Map<String, dynamic> json){
@@ -18,6 +19,7 @@ class Setting{
     ordersPort = json['ordersPort'];
     devicesPort = json['devicesPort'];
     tenantId = json['tenantId'];
+    runningText = json['runningText'];
   }
 
   Map<String, dynamic> toJson(){
@@ -28,6 +30,7 @@ class Setting{
     data['ordersPort'] = this.ordersPort;
     data['devicesPort'] = this.devicesPort;
     data['tenantId'] = this.tenantId;
+    data['runningText'] = this.runningText;
     return data;
   }
 }
