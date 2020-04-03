@@ -2,8 +2,24 @@ syntax = "proto3";
 
 package orders;
 
+// we need something better than float to represent money values
+// Adapted from https://github.com/googleapis/googleapis/blob/master/google/type/money.proto
+message DecimalValue {
+        // The whole units of the amount.
+        sint64 units = 1;
+
+        // Number of nano (10^-9) units of the amount.
+        // The value must be between -999,999,999 and +999,999,999 inclusive.
+        // If `units` is positive, `nanos` must be positive or zero.
+        // If `units` is zero, `nanos` can be positive, zero, or negative.
+        // If `units` is negative, `nanos` must be negative or zero.
+        // For example $-1.75 is represented as `units`=-1 and `nanos`=-750,000,000.
+        sint32 nanos = 2;
+}
+
 message Tag {
 	string	name = 1;
+	// NB: value is ignored in delete requests
 	string	value = 2;
 	// NB: version is ignored in create requests
 	uint32	version = 3;
@@ -13,7 +29,7 @@ message Tags {
 	repeated Tag	tag = 1;
 }
 
-message Order { 
+message Order {
 	int64	ordersId = 1;
 	string	tenantId = 2;
 	string	sourceId = 3;
@@ -21,9 +37,10 @@ message Order {
 	string	sourceBatch = 5;
 	string	pluId = 6;
 	string	pluText = 7;
-	float	qty = 8;
+	DecimalValue	qty = 8;
 	string	status = 9;
 	string	uuid = 10;
+	// NB: version is ignored in create requests
 	uint32	version = 11;
 	string	orderType = 12;
 	string	parentUuid = 13;
@@ -38,7 +55,7 @@ message GetOrderRequest {
 
 
 message CreateOrderResponse {
-	string	uuid = 1;
+	bool	status = 1;
 }
 
 message GetTagRequest {
@@ -110,7 +127,7 @@ message CreateTagRequest {
 }
 
 message CreateTagResponse {
-	string uuid = 1;
+	bool status = 1;
 }
 
 message UpdateTagRequest {
@@ -119,9 +136,17 @@ message UpdateTagRequest {
 }
 
 message UpdateTagResponse {
-	string uuid = 1;
+	bool status = 1;
 }
 
+message DeleteTagRequest {
+	string uuid = 1;
+	Tag tag = 2;
+}
+
+message DeleteTagResponse {
+	bool status = 1;
+}
 
 message CreateSubmoduleRequest {
 	string uuid = 1;
@@ -129,7 +154,7 @@ message CreateSubmoduleRequest {
 }
 
 message CreateSubmoduleResponse {
-	string uuid = 1;
+	bool status = 1;
 }
 
 message UpdateSubmoduleRequest {
@@ -138,7 +163,16 @@ message UpdateSubmoduleRequest {
 }
 
 message UpdateSubmoduleResponse {
+	bool status = 1;
+}
+
+message DeleteSubmoduleRequest {
 	string uuid = 1;
+	Submodule submodule = 2;
+}
+
+message DeleteSubmoduleResponse {
+	bool status = 1;
 }
 
 message UpdateOrderStatusRequest {
@@ -147,7 +181,16 @@ message UpdateOrderStatusRequest {
 }
 
 message UpdateOrderStatusResponse {
+	bool status = 1;
+}
+
+message UpdateOrderQtyRequest {
 	string uuid = 1;
+	DecimalValue qty = 2;
+}
+
+message UpdateOrderQtyResponse {
+	bool status = 1;
 }
 
 
@@ -165,9 +208,13 @@ service Orders {
 	rpc getOrderHistory(GetOrderRequest) returns (stream OrderHistory) {};
 
 	rpc updateOrderStatus(UpdateOrderStatusRequest) returns (UpdateOrderStatusResponse) {};
+	rpc updateOrderQty(UpdateOrderQtyRequest) returns (UpdateOrderQtyResponse) {};
 	rpc updateTag(UpdateTagRequest) returns (UpdateTagResponse) {};
 	rpc updateSubmodule(UpdateSubmoduleRequest) returns (UpdateSubmoduleResponse) {};
 
-	rpc streamOrders(streamOrdersRequest) returns (stream StreamOrdersResponse) {};
+	rpc deleteTag(DeleteTagRequest) returns (DeleteTagResponse) {};
+	rpc deleteSubmodule(DeleteSubmoduleRequest) returns (DeleteSubmoduleResponse) {};
+
+	rpc streamOrders(StreamOrdersRequest) returns (stream StreamOrdersResponse) {};
 }
 

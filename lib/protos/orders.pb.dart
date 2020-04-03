@@ -704,27 +704,27 @@ class CreateUuidResponse extends $pb.GeneratedMessage {
   void clearUuid() => clearField(1);
 }
 
-class streamOrdersRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('streamOrdersRequest', package: const $pb.PackageName('orders'), createEmptyInstance: create)
+class StreamOrdersRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('StreamOrdersRequest', package: const $pb.PackageName('orders'), createEmptyInstance: create)
     ..aOS(1, 'subscriber')
     ..aOS(2, 'lastindex')
     ..hasRequiredFields = false
   ;
 
-  streamOrdersRequest._() : super();
-  factory streamOrdersRequest() => create();
-  factory streamOrdersRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory streamOrdersRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  streamOrdersRequest clone() => streamOrdersRequest()..mergeFromMessage(this);
-  streamOrdersRequest copyWith(void Function(streamOrdersRequest) updates) => super.copyWith((message) => updates(message as streamOrdersRequest));
+  StreamOrdersRequest._() : super();
+  factory StreamOrdersRequest() => create();
+  factory StreamOrdersRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory StreamOrdersRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  StreamOrdersRequest clone() => StreamOrdersRequest()..mergeFromMessage(this);
+  StreamOrdersRequest copyWith(void Function(StreamOrdersRequest) updates) => super.copyWith((message) => updates(message as StreamOrdersRequest));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static streamOrdersRequest create() => streamOrdersRequest._();
-  streamOrdersRequest createEmptyInstance() => create();
-  static $pb.PbList<streamOrdersRequest> createRepeated() => $pb.PbList<streamOrdersRequest>();
+  static StreamOrdersRequest create() => StreamOrdersRequest._();
+  StreamOrdersRequest createEmptyInstance() => create();
+  static $pb.PbList<StreamOrdersRequest> createRepeated() => $pb.PbList<StreamOrdersRequest>();
   @$core.pragma('dart2js:noInline')
-  static streamOrdersRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<streamOrdersRequest>(create);
-  static streamOrdersRequest _defaultInstance;
+  static StreamOrdersRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<StreamOrdersRequest>(create);
+  static StreamOrdersRequest _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get subscriber => $_getSZ(0);

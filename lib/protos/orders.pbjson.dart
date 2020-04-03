@@ -128,8 +128,8 @@ const CreateUuidResponse$json = const {
   ],
 };
 
-const streamOrdersRequest$json = const {
-  '1': 'streamOrdersRequest',
+const StreamOrdersRequest$json = const {
+  '1': 'StreamOrdersRequest',
   '2': const [
     const {'1': 'subscriber', '3': 1, '4': 1, '5': 9, '10': 'subscriber'},
     const {'1': 'lastindex', '3': 2, '4': 1, '5': 9, '10': 'lastindex'},

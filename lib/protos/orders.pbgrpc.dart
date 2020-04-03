@@ -100,9 +100,9 @@ class OrdersClient extends $grpc.Client {
           ($core.List<$core.int> value) =>
               $0.DeleteSubmoduleResponse.fromBuffer(value));
   static final _$streamOrders =
-      $grpc.ClientMethod<$0.streamOrdersRequest, $0.StreamOrdersResponse>(
+      $grpc.ClientMethod<$0.StreamOrdersRequest, $0.StreamOrdersResponse>(
           '/orders.Orders/streamOrders',
-          ($0.streamOrdersRequest value) => value.writeToBuffer(),
+          ($0.StreamOrdersRequest value) => value.writeToBuffer(),
           ($core.List<$core.int> value) =>
               $0.StreamOrdersResponse.fromBuffer(value));
 
@@ -236,7 +236,7 @@ class OrdersClient extends $grpc.Client {
   }
 
   $grpc.ResponseStream<$0.StreamOrdersResponse> streamOrders(
-      $0.streamOrdersRequest request,
+      $0.StreamOrdersRequest request,
       {$grpc.CallOptions options}) {
     final call = $createCall(
         _$streamOrders, $async.Stream.fromIterable([request]),
@@ -368,13 +368,13 @@ abstract class OrdersServiceBase extends $grpc.Service {
             $0.DeleteSubmoduleRequest.fromBuffer(value),
         ($0.DeleteSubmoduleResponse value) => value.writeToBuffer()));
     $addMethod(
-        $grpc.ServiceMethod<$0.streamOrdersRequest, $0.StreamOrdersResponse>(
+        $grpc.ServiceMethod<$0.StreamOrdersRequest, $0.StreamOrdersResponse>(
             'streamOrders',
             streamOrders_Pre,
             false,
             true,
             ($core.List<$core.int> value) =>
-                $0.streamOrdersRequest.fromBuffer(value),
+                $0.StreamOrdersRequest.fromBuffer(value),
             ($0.StreamOrdersResponse value) => value.writeToBuffer()));
   }
 
@@ -461,7 +461,7 @@ abstract class OrdersServiceBase extends $grpc.Service {
 
   $async.Stream<$0.StreamOrdersResponse> streamOrders_Pre(
       $grpc.ServiceCall call,
-      $async.Future<$0.streamOrdersRequest> request) async* {
+      $async.Future<$0.StreamOrdersRequest> request) async* {
     yield* streamOrders(call, await request);
   }
 
@@ -496,5 +496,5 @@ abstract class OrdersServiceBase extends $grpc.Service {
   $async.Future<$0.DeleteSubmoduleResponse> deleteSubmodule(
       $grpc.ServiceCall call, $0.DeleteSubmoduleRequest request);
   $async.Stream<$0.StreamOrdersResponse> streamOrders(
-      $grpc.ServiceCall call, $0.streamOrdersRequest request);
+      $grpc.ServiceCall call, $0.StreamOrdersRequest request);
 }
