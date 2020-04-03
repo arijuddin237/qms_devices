@@ -178,6 +178,86 @@ class OrderService {
     }
   }
 
+  //-Update Order QTY-------------------------------------------------------------------
+  Future<UpdateOrderQtyResponse> updateOrderQty({
+    @required String uuid,
+    @required DecimalValue qty
+  }) async {
+    try {
+      final resUpdateOrderQty = _client.updateOrderQty(
+        UpdateOrderQtyRequest()
+          ..uuid = uuid
+          ..qty = qty
+      );
+      return resUpdateOrderQty;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  //-Update Tag--------------------------------------------------------------------------
+  Future<UpdateTagResponse> updateTag({@required String uuid, @required Tag tag}) async {
+    try {
+      final resUpdateTag = _client.updateTag(
+        UpdateTagRequest()
+          ..uuid = uuid
+          ..tag = tag
+      );
+      return resUpdateTag;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  //-Update Submodule--------------------------------------------------------------------
+  Future<UpdateSubmoduleResponse> updateSubmodule({
+    @required String uuid,
+    @required Submodule submodule
+  }) async {
+    try {
+      final resUpdateSubmodule = _client.updateSubmodule(
+        UpdateSubmoduleRequest()
+          ..uuid = uuid
+          ..submodule = submodule
+      );
+      return resUpdateSubmodule;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  //======================================================================Delete Function
+  //-Delete Tag--------------------------------------------------------------------------
+  Future<DeleteTagResponse> deleteTag({@required String uuid, @required Tag tag}) async {
+    try {
+      final resDeleteTag = _client.deleteTag(
+        DeleteTagRequest()
+          ..uuid = uuid
+          ..tag = tag
+      );
+      return resDeleteTag;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  //-Delete Submodule--------------------------------------------------------------------
+  Future<DeleteSubmoduleResponse> deleteSubmodule({
+    @required String uuid,
+    @required Submodule submodule
+  }) async {
+    try {
+      final resDeleteSubmodule = _client.deleteSubmodule(
+        DeleteSubmoduleRequest()
+          ..uuid = uuid
+          ..submodule = submodule
+      );
+      return resDeleteSubmodule;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
   //======================================================================Stream Function
   //-Stream Get Order--------------------------------------------------------------------
   Stream<Order> streamGetOrder({String uuId}) async* {
