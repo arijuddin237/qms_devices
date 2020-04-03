@@ -8,6 +8,7 @@ import 'package:qms_device/model/setting.dart';
 import 'package:qms_device/model/sourceBatch.dart';
 import 'package:qms_device/protos/orders.pb.dart';
 import 'package:qms_device/service/orderService.dart';
+import 'package:qms_device/ui/callingOrder/newButton.dart';
 import 'package:qms_device/utils.dart';
 
 class HeaderCallingOrder extends StatelessWidget {
@@ -83,73 +84,9 @@ class HeaderCallingOrder extends StatelessWidget {
                           left: 8.0,
                           right: 8.0
                         ),
-                        child: StreamBuilder<Setting>(
-                          stream: blocSetting.subject.stream,
-                          builder: (context, snapshotSetting) {
-                            if(!snapshotSetting.hasData){
-                              return Container();
-                            } else {
-                              blocSetting.getSourceBatch(
-                                snapshotSetting.data.tenantId
-                              );
-                              return StreamBuilder<SourceBatch>(
-                              stream: blocSetting.sourceBatch.stream,
-                              builder: (context, snapSource) {
-                                return RaisedButton(
-                                  color: Colors.white,
-                                  elevation: 0.0,
-                                  onPressed: (){
-                                    OrderService().createUuid(
-                                      sourceId: 'POS01'
-                                    ).then((data){
-                                      OrderService().createOrder(
-                                        tenantId: snapshotSetting.data.tenantId,
-                                        sourceId: 'POS01',
-                                        uuId: data.uuid,
-                                        sourceBatch: (!snapSource.hasData) 
-                                          ? '1'
-                                          : '${snapSource.data.sourceBatch+1}'
-                                      );
-                                    }).then((data){
-                                      if(!snapSource.hasData){
-                                        blocSetting.addSourceBatch(
-                                          sourceBatch: SourceBatch(
-                                            sourceBatch: 1,
-                                            tenantId: snapshotSetting.data.tenantId
-                                          ),
-                                          exist: false
-                                        );
-                                      } else {
-                                        blocSetting.addSourceBatch(
-                                          sourceBatch: SourceBatch(
-                                            sourceBatch: snapSource.data.sourceBatch+1,
-                                            tenantId: snapshotSetting.data.tenantId
-                                          ),
-                                          exist: true
-                                        );
-                                      }
-                                    });
-                                  },
-                                  child: Container(
-                                    height: SizeConfig.safeBlockVertical * 28,
-                                    width: SizeConfig.safeBlockHorizontal * 12,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Icon(Icons.add, size: snapshotFont.data.fontSize6),
-                                        Text('New', style: TextStyle(
-                                          fontSize: snapshotFont.data.fontSize8,
-                                          fontWeight: FontWeight.bold
-                                        ))
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }
-                            );
-                            }
-                          }
-                        ),
+                        child: NewButton(
+                          fontSize: snapshotFont.data,
+                        )
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
