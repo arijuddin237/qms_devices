@@ -69,6 +69,12 @@ class OrdersClient extends $grpc.Client {
       ($0.UpdateOrderStatusRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) =>
           $0.UpdateOrderStatusResponse.fromBuffer(value));
+  static final _$updateOrderQty =
+      $grpc.ClientMethod<$0.UpdateOrderQtyRequest, $0.UpdateOrderQtyResponse>(
+          '/orders.Orders/updateOrderQty',
+          ($0.UpdateOrderQtyRequest value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) =>
+              $0.UpdateOrderQtyResponse.fromBuffer(value));
   static final _$updateTag =
       $grpc.ClientMethod<$0.UpdateTagRequest, $0.UpdateTagResponse>(
           '/orders.Orders/updateTag',
@@ -81,10 +87,22 @@ class OrdersClient extends $grpc.Client {
           ($0.UpdateSubmoduleRequest value) => value.writeToBuffer(),
           ($core.List<$core.int> value) =>
               $0.UpdateSubmoduleResponse.fromBuffer(value));
+  static final _$deleteTag =
+      $grpc.ClientMethod<$0.DeleteTagRequest, $0.DeleteTagResponse>(
+          '/orders.Orders/deleteTag',
+          ($0.DeleteTagRequest value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) =>
+              $0.DeleteTagResponse.fromBuffer(value));
+  static final _$deleteSubmodule =
+      $grpc.ClientMethod<$0.DeleteSubmoduleRequest, $0.DeleteSubmoduleResponse>(
+          '/orders.Orders/deleteSubmodule',
+          ($0.DeleteSubmoduleRequest value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) =>
+              $0.DeleteSubmoduleResponse.fromBuffer(value));
   static final _$streamOrders =
-      $grpc.ClientMethod<$0.StreamOrdersRequest, $0.StreamOrdersResponse>(
+      $grpc.ClientMethod<$0.streamOrdersRequest, $0.StreamOrdersResponse>(
           '/orders.Orders/streamOrders',
-          ($0.StreamOrdersRequest value) => value.writeToBuffer(),
+          ($0.streamOrdersRequest value) => value.writeToBuffer(),
           ($core.List<$core.int> value) =>
               $0.StreamOrdersResponse.fromBuffer(value));
 
@@ -174,6 +192,15 @@ class OrdersClient extends $grpc.Client {
     return $grpc.ResponseFuture(call);
   }
 
+  $grpc.ResponseFuture<$0.UpdateOrderQtyResponse> updateOrderQty(
+      $0.UpdateOrderQtyRequest request,
+      {$grpc.CallOptions options}) {
+    final call = $createCall(
+        _$updateOrderQty, $async.Stream.fromIterable([request]),
+        options: options);
+    return $grpc.ResponseFuture(call);
+  }
+
   $grpc.ResponseFuture<$0.UpdateTagResponse> updateTag(
       $0.UpdateTagRequest request,
       {$grpc.CallOptions options}) {
@@ -191,8 +218,25 @@ class OrdersClient extends $grpc.Client {
     return $grpc.ResponseFuture(call);
   }
 
+  $grpc.ResponseFuture<$0.DeleteTagResponse> deleteTag(
+      $0.DeleteTagRequest request,
+      {$grpc.CallOptions options}) {
+    final call = $createCall(_$deleteTag, $async.Stream.fromIterable([request]),
+        options: options);
+    return $grpc.ResponseFuture(call);
+  }
+
+  $grpc.ResponseFuture<$0.DeleteSubmoduleResponse> deleteSubmodule(
+      $0.DeleteSubmoduleRequest request,
+      {$grpc.CallOptions options}) {
+    final call = $createCall(
+        _$deleteSubmodule, $async.Stream.fromIterable([request]),
+        options: options);
+    return $grpc.ResponseFuture(call);
+  }
+
   $grpc.ResponseStream<$0.StreamOrdersResponse> streamOrders(
-      $0.StreamOrdersRequest request,
+      $0.streamOrdersRequest request,
       {$grpc.CallOptions options}) {
     final call = $createCall(
         _$streamOrders, $async.Stream.fromIterable([request]),
@@ -282,6 +326,15 @@ abstract class OrdersServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) =>
             $0.UpdateOrderStatusRequest.fromBuffer(value),
         ($0.UpdateOrderStatusResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.UpdateOrderQtyRequest,
+            $0.UpdateOrderQtyResponse>(
+        'updateOrderQty',
+        updateOrderQty_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.UpdateOrderQtyRequest.fromBuffer(value),
+        ($0.UpdateOrderQtyResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.UpdateTagRequest, $0.UpdateTagResponse>(
         'updateTag',
         updateTag_Pre,
@@ -298,14 +351,30 @@ abstract class OrdersServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) =>
             $0.UpdateSubmoduleRequest.fromBuffer(value),
         ($0.UpdateSubmoduleResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.DeleteTagRequest, $0.DeleteTagResponse>(
+        'deleteTag',
+        deleteTag_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.DeleteTagRequest.fromBuffer(value),
+        ($0.DeleteTagResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.DeleteSubmoduleRequest,
+            $0.DeleteSubmoduleResponse>(
+        'deleteSubmodule',
+        deleteSubmodule_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.DeleteSubmoduleRequest.fromBuffer(value),
+        ($0.DeleteSubmoduleResponse value) => value.writeToBuffer()));
     $addMethod(
-        $grpc.ServiceMethod<$0.StreamOrdersRequest, $0.StreamOrdersResponse>(
+        $grpc.ServiceMethod<$0.streamOrdersRequest, $0.StreamOrdersResponse>(
             'streamOrders',
             streamOrders_Pre,
             false,
             true,
             ($core.List<$core.int> value) =>
-                $0.StreamOrdersRequest.fromBuffer(value),
+                $0.streamOrdersRequest.fromBuffer(value),
             ($0.StreamOrdersResponse value) => value.writeToBuffer()));
   }
 
@@ -362,6 +431,12 @@ abstract class OrdersServiceBase extends $grpc.Service {
     return updateOrderStatus(call, await request);
   }
 
+  $async.Future<$0.UpdateOrderQtyResponse> updateOrderQty_Pre(
+      $grpc.ServiceCall call,
+      $async.Future<$0.UpdateOrderQtyRequest> request) async {
+    return updateOrderQty(call, await request);
+  }
+
   $async.Future<$0.UpdateTagResponse> updateTag_Pre($grpc.ServiceCall call,
       $async.Future<$0.UpdateTagRequest> request) async {
     return updateTag(call, await request);
@@ -373,9 +448,20 @@ abstract class OrdersServiceBase extends $grpc.Service {
     return updateSubmodule(call, await request);
   }
 
+  $async.Future<$0.DeleteTagResponse> deleteTag_Pre($grpc.ServiceCall call,
+      $async.Future<$0.DeleteTagRequest> request) async {
+    return deleteTag(call, await request);
+  }
+
+  $async.Future<$0.DeleteSubmoduleResponse> deleteSubmodule_Pre(
+      $grpc.ServiceCall call,
+      $async.Future<$0.DeleteSubmoduleRequest> request) async {
+    return deleteSubmodule(call, await request);
+  }
+
   $async.Stream<$0.StreamOrdersResponse> streamOrders_Pre(
       $grpc.ServiceCall call,
-      $async.Future<$0.StreamOrdersRequest> request) async* {
+      $async.Future<$0.streamOrdersRequest> request) async* {
     yield* streamOrders(call, await request);
   }
 
@@ -399,10 +485,16 @@ abstract class OrdersServiceBase extends $grpc.Service {
       $grpc.ServiceCall call, $0.GetOrderRequest request);
   $async.Future<$0.UpdateOrderStatusResponse> updateOrderStatus(
       $grpc.ServiceCall call, $0.UpdateOrderStatusRequest request);
+  $async.Future<$0.UpdateOrderQtyResponse> updateOrderQty(
+      $grpc.ServiceCall call, $0.UpdateOrderQtyRequest request);
   $async.Future<$0.UpdateTagResponse> updateTag(
       $grpc.ServiceCall call, $0.UpdateTagRequest request);
   $async.Future<$0.UpdateSubmoduleResponse> updateSubmodule(
       $grpc.ServiceCall call, $0.UpdateSubmoduleRequest request);
+  $async.Future<$0.DeleteTagResponse> deleteTag(
+      $grpc.ServiceCall call, $0.DeleteTagRequest request);
+  $async.Future<$0.DeleteSubmoduleResponse> deleteSubmodule(
+      $grpc.ServiceCall call, $0.DeleteSubmoduleRequest request);
   $async.Stream<$0.StreamOrdersResponse> streamOrders(
-      $grpc.ServiceCall call, $0.StreamOrdersRequest request);
+      $grpc.ServiceCall call, $0.streamOrdersRequest request);
 }

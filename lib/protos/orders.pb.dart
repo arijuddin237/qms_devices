@@ -10,6 +10,47 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
+class DecimalValue extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('DecimalValue', package: const $pb.PackageName('orders'), createEmptyInstance: create)
+    ..a<$fixnum.Int64>(1, 'units', $pb.PbFieldType.OS6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..a<$core.int>(2, 'nanos', $pb.PbFieldType.OS3)
+    ..hasRequiredFields = false
+  ;
+
+  DecimalValue._() : super();
+  factory DecimalValue() => create();
+  factory DecimalValue.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DecimalValue.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  DecimalValue clone() => DecimalValue()..mergeFromMessage(this);
+  DecimalValue copyWith(void Function(DecimalValue) updates) => super.copyWith((message) => updates(message as DecimalValue));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static DecimalValue create() => DecimalValue._();
+  DecimalValue createEmptyInstance() => create();
+  static $pb.PbList<DecimalValue> createRepeated() => $pb.PbList<DecimalValue>();
+  @$core.pragma('dart2js:noInline')
+  static DecimalValue getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DecimalValue>(create);
+  static DecimalValue _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $fixnum.Int64 get units => $_getI64(0);
+  @$pb.TagNumber(1)
+  set units($fixnum.Int64 v) { $_setInt64(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasUnits() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUnits() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get nanos => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set nanos($core.int v) { $_setSignedInt32(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasNanos() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearNanos() => clearField(2);
+}
+
 class Tag extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('Tag', package: const $pb.PackageName('orders'), createEmptyInstance: create)
     ..aOS(1, 'name')
@@ -95,7 +136,7 @@ class Order extends $pb.GeneratedMessage {
     ..aOS(5, 'sourceBatch', protoName: 'sourceBatch')
     ..aOS(6, 'pluId', protoName: 'pluId')
     ..aOS(7, 'pluText', protoName: 'pluText')
-    ..a<$core.double>(8, 'qty', $pb.PbFieldType.OF)
+    ..aOM<DecimalValue>(8, 'qty', subBuilder: DecimalValue.create)
     ..aOS(9, 'status')
     ..aOS(10, 'uuid')
     ..a<$core.int>(11, 'version', $pb.PbFieldType.OU3)
@@ -186,13 +227,15 @@ class Order extends $pb.GeneratedMessage {
   void clearPluText() => clearField(7);
 
   @$pb.TagNumber(8)
-  $core.double get qty => $_getN(7);
+  DecimalValue get qty => $_getN(7);
   @$pb.TagNumber(8)
-  set qty($core.double v) { $_setFloat(7, v); }
+  set qty(DecimalValue v) { setField(8, v); }
   @$pb.TagNumber(8)
   $core.bool hasQty() => $_has(7);
   @$pb.TagNumber(8)
   void clearQty() => clearField(8);
+  @$pb.TagNumber(8)
+  DecimalValue ensureQty() => $_ensure(7);
 
   @$pb.TagNumber(9)
   $core.String get status => $_getSZ(8);
@@ -304,7 +347,7 @@ class GetOrderRequest extends $pb.GeneratedMessage {
 
 class CreateOrderResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('CreateOrderResponse', package: const $pb.PackageName('orders'), createEmptyInstance: create)
-    ..aOS(1, 'uuid')
+    ..aOB(1, 'status')
     ..hasRequiredFields = false
   ;
 
@@ -324,13 +367,13 @@ class CreateOrderResponse extends $pb.GeneratedMessage {
   static CreateOrderResponse _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get uuid => $_getSZ(0);
+  $core.bool get status => $_getBF(0);
   @$pb.TagNumber(1)
-  set uuid($core.String v) { $_setString(0, v); }
+  set status($core.bool v) { $_setBool(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasUuid() => $_has(0);
+  $core.bool hasStatus() => $_has(0);
   @$pb.TagNumber(1)
-  void clearUuid() => clearField(1);
+  void clearStatus() => clearField(1);
 }
 
 class GetTagRequest extends $pb.GeneratedMessage {
@@ -661,27 +704,27 @@ class CreateUuidResponse extends $pb.GeneratedMessage {
   void clearUuid() => clearField(1);
 }
 
-class StreamOrdersRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('StreamOrdersRequest', package: const $pb.PackageName('orders'), createEmptyInstance: create)
+class streamOrdersRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('streamOrdersRequest', package: const $pb.PackageName('orders'), createEmptyInstance: create)
     ..aOS(1, 'subscriber')
     ..aOS(2, 'lastindex')
     ..hasRequiredFields = false
   ;
 
-  StreamOrdersRequest._() : super();
-  factory StreamOrdersRequest() => create();
-  factory StreamOrdersRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory StreamOrdersRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  StreamOrdersRequest clone() => StreamOrdersRequest()..mergeFromMessage(this);
-  StreamOrdersRequest copyWith(void Function(StreamOrdersRequest) updates) => super.copyWith((message) => updates(message as StreamOrdersRequest));
+  streamOrdersRequest._() : super();
+  factory streamOrdersRequest() => create();
+  factory streamOrdersRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory streamOrdersRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  streamOrdersRequest clone() => streamOrdersRequest()..mergeFromMessage(this);
+  streamOrdersRequest copyWith(void Function(streamOrdersRequest) updates) => super.copyWith((message) => updates(message as streamOrdersRequest));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static StreamOrdersRequest create() => StreamOrdersRequest._();
-  StreamOrdersRequest createEmptyInstance() => create();
-  static $pb.PbList<StreamOrdersRequest> createRepeated() => $pb.PbList<StreamOrdersRequest>();
+  static streamOrdersRequest create() => streamOrdersRequest._();
+  streamOrdersRequest createEmptyInstance() => create();
+  static $pb.PbList<streamOrdersRequest> createRepeated() => $pb.PbList<streamOrdersRequest>();
   @$core.pragma('dart2js:noInline')
-  static StreamOrdersRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<StreamOrdersRequest>(create);
-  static StreamOrdersRequest _defaultInstance;
+  static streamOrdersRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<streamOrdersRequest>(create);
+  static streamOrdersRequest _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get subscriber => $_getSZ(0);
@@ -900,7 +943,7 @@ class CreateTagRequest extends $pb.GeneratedMessage {
 
 class CreateTagResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('CreateTagResponse', package: const $pb.PackageName('orders'), createEmptyInstance: create)
-    ..aOS(1, 'uuid')
+    ..aOB(1, 'status')
     ..hasRequiredFields = false
   ;
 
@@ -920,13 +963,13 @@ class CreateTagResponse extends $pb.GeneratedMessage {
   static CreateTagResponse _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get uuid => $_getSZ(0);
+  $core.bool get status => $_getBF(0);
   @$pb.TagNumber(1)
-  set uuid($core.String v) { $_setString(0, v); }
+  set status($core.bool v) { $_setBool(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasUuid() => $_has(0);
+  $core.bool hasStatus() => $_has(0);
   @$pb.TagNumber(1)
-  void clearUuid() => clearField(1);
+  void clearStatus() => clearField(1);
 }
 
 class UpdateTagRequest extends $pb.GeneratedMessage {
@@ -974,7 +1017,7 @@ class UpdateTagRequest extends $pb.GeneratedMessage {
 
 class UpdateTagResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('UpdateTagResponse', package: const $pb.PackageName('orders'), createEmptyInstance: create)
-    ..aOS(1, 'uuid')
+    ..aOB(1, 'status')
     ..hasRequiredFields = false
   ;
 
@@ -994,6 +1037,38 @@ class UpdateTagResponse extends $pb.GeneratedMessage {
   static UpdateTagResponse _defaultInstance;
 
   @$pb.TagNumber(1)
+  $core.bool get status => $_getBF(0);
+  @$pb.TagNumber(1)
+  set status($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasStatus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearStatus() => clearField(1);
+}
+
+class DeleteTagRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('DeleteTagRequest', package: const $pb.PackageName('orders'), createEmptyInstance: create)
+    ..aOS(1, 'uuid')
+    ..aOM<Tag>(2, 'tag', subBuilder: Tag.create)
+    ..hasRequiredFields = false
+  ;
+
+  DeleteTagRequest._() : super();
+  factory DeleteTagRequest() => create();
+  factory DeleteTagRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeleteTagRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  DeleteTagRequest clone() => DeleteTagRequest()..mergeFromMessage(this);
+  DeleteTagRequest copyWith(void Function(DeleteTagRequest) updates) => super.copyWith((message) => updates(message as DeleteTagRequest));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static DeleteTagRequest create() => DeleteTagRequest._();
+  DeleteTagRequest createEmptyInstance() => create();
+  static $pb.PbList<DeleteTagRequest> createRepeated() => $pb.PbList<DeleteTagRequest>();
+  @$core.pragma('dart2js:noInline')
+  static DeleteTagRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteTagRequest>(create);
+  static DeleteTagRequest _defaultInstance;
+
+  @$pb.TagNumber(1)
   $core.String get uuid => $_getSZ(0);
   @$pb.TagNumber(1)
   set uuid($core.String v) { $_setString(0, v); }
@@ -1001,6 +1076,48 @@ class UpdateTagResponse extends $pb.GeneratedMessage {
   $core.bool hasUuid() => $_has(0);
   @$pb.TagNumber(1)
   void clearUuid() => clearField(1);
+
+  @$pb.TagNumber(2)
+  Tag get tag => $_getN(1);
+  @$pb.TagNumber(2)
+  set tag(Tag v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasTag() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearTag() => clearField(2);
+  @$pb.TagNumber(2)
+  Tag ensureTag() => $_ensure(1);
+}
+
+class DeleteTagResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('DeleteTagResponse', package: const $pb.PackageName('orders'), createEmptyInstance: create)
+    ..aOB(1, 'status')
+    ..hasRequiredFields = false
+  ;
+
+  DeleteTagResponse._() : super();
+  factory DeleteTagResponse() => create();
+  factory DeleteTagResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeleteTagResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  DeleteTagResponse clone() => DeleteTagResponse()..mergeFromMessage(this);
+  DeleteTagResponse copyWith(void Function(DeleteTagResponse) updates) => super.copyWith((message) => updates(message as DeleteTagResponse));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static DeleteTagResponse create() => DeleteTagResponse._();
+  DeleteTagResponse createEmptyInstance() => create();
+  static $pb.PbList<DeleteTagResponse> createRepeated() => $pb.PbList<DeleteTagResponse>();
+  @$core.pragma('dart2js:noInline')
+  static DeleteTagResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteTagResponse>(create);
+  static DeleteTagResponse _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get status => $_getBF(0);
+  @$pb.TagNumber(1)
+  set status($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasStatus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearStatus() => clearField(1);
 }
 
 class CreateSubmoduleRequest extends $pb.GeneratedMessage {
@@ -1048,7 +1165,7 @@ class CreateSubmoduleRequest extends $pb.GeneratedMessage {
 
 class CreateSubmoduleResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('CreateSubmoduleResponse', package: const $pb.PackageName('orders'), createEmptyInstance: create)
-    ..aOS(1, 'uuid')
+    ..aOB(1, 'status')
     ..hasRequiredFields = false
   ;
 
@@ -1068,13 +1185,13 @@ class CreateSubmoduleResponse extends $pb.GeneratedMessage {
   static CreateSubmoduleResponse _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get uuid => $_getSZ(0);
+  $core.bool get status => $_getBF(0);
   @$pb.TagNumber(1)
-  set uuid($core.String v) { $_setString(0, v); }
+  set status($core.bool v) { $_setBool(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasUuid() => $_has(0);
+  $core.bool hasStatus() => $_has(0);
   @$pb.TagNumber(1)
-  void clearUuid() => clearField(1);
+  void clearStatus() => clearField(1);
 }
 
 class UpdateSubmoduleRequest extends $pb.GeneratedMessage {
@@ -1122,7 +1239,7 @@ class UpdateSubmoduleRequest extends $pb.GeneratedMessage {
 
 class UpdateSubmoduleResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('UpdateSubmoduleResponse', package: const $pb.PackageName('orders'), createEmptyInstance: create)
-    ..aOS(1, 'uuid')
+    ..aOB(1, 'status')
     ..hasRequiredFields = false
   ;
 
@@ -1142,6 +1259,38 @@ class UpdateSubmoduleResponse extends $pb.GeneratedMessage {
   static UpdateSubmoduleResponse _defaultInstance;
 
   @$pb.TagNumber(1)
+  $core.bool get status => $_getBF(0);
+  @$pb.TagNumber(1)
+  set status($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasStatus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearStatus() => clearField(1);
+}
+
+class DeleteSubmoduleRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('DeleteSubmoduleRequest', package: const $pb.PackageName('orders'), createEmptyInstance: create)
+    ..aOS(1, 'uuid')
+    ..aOM<Submodule>(2, 'submodule', subBuilder: Submodule.create)
+    ..hasRequiredFields = false
+  ;
+
+  DeleteSubmoduleRequest._() : super();
+  factory DeleteSubmoduleRequest() => create();
+  factory DeleteSubmoduleRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeleteSubmoduleRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  DeleteSubmoduleRequest clone() => DeleteSubmoduleRequest()..mergeFromMessage(this);
+  DeleteSubmoduleRequest copyWith(void Function(DeleteSubmoduleRequest) updates) => super.copyWith((message) => updates(message as DeleteSubmoduleRequest));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static DeleteSubmoduleRequest create() => DeleteSubmoduleRequest._();
+  DeleteSubmoduleRequest createEmptyInstance() => create();
+  static $pb.PbList<DeleteSubmoduleRequest> createRepeated() => $pb.PbList<DeleteSubmoduleRequest>();
+  @$core.pragma('dart2js:noInline')
+  static DeleteSubmoduleRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteSubmoduleRequest>(create);
+  static DeleteSubmoduleRequest _defaultInstance;
+
+  @$pb.TagNumber(1)
   $core.String get uuid => $_getSZ(0);
   @$pb.TagNumber(1)
   set uuid($core.String v) { $_setString(0, v); }
@@ -1149,6 +1298,48 @@ class UpdateSubmoduleResponse extends $pb.GeneratedMessage {
   $core.bool hasUuid() => $_has(0);
   @$pb.TagNumber(1)
   void clearUuid() => clearField(1);
+
+  @$pb.TagNumber(2)
+  Submodule get submodule => $_getN(1);
+  @$pb.TagNumber(2)
+  set submodule(Submodule v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasSubmodule() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearSubmodule() => clearField(2);
+  @$pb.TagNumber(2)
+  Submodule ensureSubmodule() => $_ensure(1);
+}
+
+class DeleteSubmoduleResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('DeleteSubmoduleResponse', package: const $pb.PackageName('orders'), createEmptyInstance: create)
+    ..aOB(1, 'status')
+    ..hasRequiredFields = false
+  ;
+
+  DeleteSubmoduleResponse._() : super();
+  factory DeleteSubmoduleResponse() => create();
+  factory DeleteSubmoduleResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeleteSubmoduleResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  DeleteSubmoduleResponse clone() => DeleteSubmoduleResponse()..mergeFromMessage(this);
+  DeleteSubmoduleResponse copyWith(void Function(DeleteSubmoduleResponse) updates) => super.copyWith((message) => updates(message as DeleteSubmoduleResponse));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static DeleteSubmoduleResponse create() => DeleteSubmoduleResponse._();
+  DeleteSubmoduleResponse createEmptyInstance() => create();
+  static $pb.PbList<DeleteSubmoduleResponse> createRepeated() => $pb.PbList<DeleteSubmoduleResponse>();
+  @$core.pragma('dart2js:noInline')
+  static DeleteSubmoduleResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteSubmoduleResponse>(create);
+  static DeleteSubmoduleResponse _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get status => $_getBF(0);
+  @$pb.TagNumber(1)
+  set status($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasStatus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearStatus() => clearField(1);
 }
 
 class UpdateOrderStatusRequest extends $pb.GeneratedMessage {
@@ -1194,7 +1385,7 @@ class UpdateOrderStatusRequest extends $pb.GeneratedMessage {
 
 class UpdateOrderStatusResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('UpdateOrderStatusResponse', package: const $pb.PackageName('orders'), createEmptyInstance: create)
-    ..aOS(1, 'uuid')
+    ..aOB(1, 'status')
     ..hasRequiredFields = false
   ;
 
@@ -1214,6 +1405,38 @@ class UpdateOrderStatusResponse extends $pb.GeneratedMessage {
   static UpdateOrderStatusResponse _defaultInstance;
 
   @$pb.TagNumber(1)
+  $core.bool get status => $_getBF(0);
+  @$pb.TagNumber(1)
+  set status($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasStatus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearStatus() => clearField(1);
+}
+
+class UpdateOrderQtyRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('UpdateOrderQtyRequest', package: const $pb.PackageName('orders'), createEmptyInstance: create)
+    ..aOS(1, 'uuid')
+    ..aOM<DecimalValue>(2, 'qty', subBuilder: DecimalValue.create)
+    ..hasRequiredFields = false
+  ;
+
+  UpdateOrderQtyRequest._() : super();
+  factory UpdateOrderQtyRequest() => create();
+  factory UpdateOrderQtyRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdateOrderQtyRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  UpdateOrderQtyRequest clone() => UpdateOrderQtyRequest()..mergeFromMessage(this);
+  UpdateOrderQtyRequest copyWith(void Function(UpdateOrderQtyRequest) updates) => super.copyWith((message) => updates(message as UpdateOrderQtyRequest));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static UpdateOrderQtyRequest create() => UpdateOrderQtyRequest._();
+  UpdateOrderQtyRequest createEmptyInstance() => create();
+  static $pb.PbList<UpdateOrderQtyRequest> createRepeated() => $pb.PbList<UpdateOrderQtyRequest>();
+  @$core.pragma('dart2js:noInline')
+  static UpdateOrderQtyRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateOrderQtyRequest>(create);
+  static UpdateOrderQtyRequest _defaultInstance;
+
+  @$pb.TagNumber(1)
   $core.String get uuid => $_getSZ(0);
   @$pb.TagNumber(1)
   set uuid($core.String v) { $_setString(0, v); }
@@ -1221,5 +1444,47 @@ class UpdateOrderStatusResponse extends $pb.GeneratedMessage {
   $core.bool hasUuid() => $_has(0);
   @$pb.TagNumber(1)
   void clearUuid() => clearField(1);
+
+  @$pb.TagNumber(2)
+  DecimalValue get qty => $_getN(1);
+  @$pb.TagNumber(2)
+  set qty(DecimalValue v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasQty() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearQty() => clearField(2);
+  @$pb.TagNumber(2)
+  DecimalValue ensureQty() => $_ensure(1);
+}
+
+class UpdateOrderQtyResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('UpdateOrderQtyResponse', package: const $pb.PackageName('orders'), createEmptyInstance: create)
+    ..aOB(1, 'status')
+    ..hasRequiredFields = false
+  ;
+
+  UpdateOrderQtyResponse._() : super();
+  factory UpdateOrderQtyResponse() => create();
+  factory UpdateOrderQtyResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdateOrderQtyResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  UpdateOrderQtyResponse clone() => UpdateOrderQtyResponse()..mergeFromMessage(this);
+  UpdateOrderQtyResponse copyWith(void Function(UpdateOrderQtyResponse) updates) => super.copyWith((message) => updates(message as UpdateOrderQtyResponse));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static UpdateOrderQtyResponse create() => UpdateOrderQtyResponse._();
+  UpdateOrderQtyResponse createEmptyInstance() => create();
+  static $pb.PbList<UpdateOrderQtyResponse> createRepeated() => $pb.PbList<UpdateOrderQtyResponse>();
+  @$core.pragma('dart2js:noInline')
+  static UpdateOrderQtyResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateOrderQtyResponse>(create);
+  static UpdateOrderQtyResponse _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get status => $_getBF(0);
+  @$pb.TagNumber(1)
+  set status($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasStatus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearStatus() => clearField(1);
 }
 

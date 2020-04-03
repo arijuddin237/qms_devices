@@ -5,6 +5,14 @@
 // @dart = 2.3
 // ignore_for_file: camel_case_types,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type
 
+const DecimalValue$json = const {
+  '1': 'DecimalValue',
+  '2': const [
+    const {'1': 'units', '3': 1, '4': 1, '5': 18, '10': 'units'},
+    const {'1': 'nanos', '3': 2, '4': 1, '5': 17, '10': 'nanos'},
+  ],
+};
+
 const Tag$json = const {
   '1': 'Tag',
   '2': const [
@@ -31,7 +39,7 @@ const Order$json = const {
     const {'1': 'sourceBatch', '3': 5, '4': 1, '5': 9, '10': 'sourceBatch'},
     const {'1': 'pluId', '3': 6, '4': 1, '5': 9, '10': 'pluId'},
     const {'1': 'pluText', '3': 7, '4': 1, '5': 9, '10': 'pluText'},
-    const {'1': 'qty', '3': 8, '4': 1, '5': 2, '10': 'qty'},
+    const {'1': 'qty', '3': 8, '4': 1, '5': 11, '6': '.orders.DecimalValue', '10': 'qty'},
     const {'1': 'status', '3': 9, '4': 1, '5': 9, '10': 'status'},
     const {'1': 'uuid', '3': 10, '4': 1, '5': 9, '10': 'uuid'},
     const {'1': 'version', '3': 11, '4': 1, '5': 13, '10': 'version'},
@@ -53,7 +61,7 @@ const GetOrderRequest$json = const {
 const CreateOrderResponse$json = const {
   '1': 'CreateOrderResponse',
   '2': const [
-    const {'1': 'uuid', '3': 1, '4': 1, '5': 9, '10': 'uuid'},
+    const {'1': 'status', '3': 1, '4': 1, '5': 8, '10': 'status'},
   ],
 };
 
@@ -120,8 +128,8 @@ const CreateUuidResponse$json = const {
   ],
 };
 
-const StreamOrdersRequest$json = const {
-  '1': 'StreamOrdersRequest',
+const streamOrdersRequest$json = const {
+  '1': 'streamOrdersRequest',
   '2': const [
     const {'1': 'subscriber', '3': 1, '4': 1, '5': 9, '10': 'subscriber'},
     const {'1': 'lastindex', '3': 2, '4': 1, '5': 9, '10': 'lastindex'},
@@ -166,7 +174,7 @@ const CreateTagRequest$json = const {
 const CreateTagResponse$json = const {
   '1': 'CreateTagResponse',
   '2': const [
-    const {'1': 'uuid', '3': 1, '4': 1, '5': 9, '10': 'uuid'},
+    const {'1': 'status', '3': 1, '4': 1, '5': 8, '10': 'status'},
   ],
 };
 
@@ -181,7 +189,22 @@ const UpdateTagRequest$json = const {
 const UpdateTagResponse$json = const {
   '1': 'UpdateTagResponse',
   '2': const [
+    const {'1': 'status', '3': 1, '4': 1, '5': 8, '10': 'status'},
+  ],
+};
+
+const DeleteTagRequest$json = const {
+  '1': 'DeleteTagRequest',
+  '2': const [
     const {'1': 'uuid', '3': 1, '4': 1, '5': 9, '10': 'uuid'},
+    const {'1': 'tag', '3': 2, '4': 1, '5': 11, '6': '.orders.Tag', '10': 'tag'},
+  ],
+};
+
+const DeleteTagResponse$json = const {
+  '1': 'DeleteTagResponse',
+  '2': const [
+    const {'1': 'status', '3': 1, '4': 1, '5': 8, '10': 'status'},
   ],
 };
 
@@ -196,7 +219,7 @@ const CreateSubmoduleRequest$json = const {
 const CreateSubmoduleResponse$json = const {
   '1': 'CreateSubmoduleResponse',
   '2': const [
-    const {'1': 'uuid', '3': 1, '4': 1, '5': 9, '10': 'uuid'},
+    const {'1': 'status', '3': 1, '4': 1, '5': 8, '10': 'status'},
   ],
 };
 
@@ -211,7 +234,22 @@ const UpdateSubmoduleRequest$json = const {
 const UpdateSubmoduleResponse$json = const {
   '1': 'UpdateSubmoduleResponse',
   '2': const [
+    const {'1': 'status', '3': 1, '4': 1, '5': 8, '10': 'status'},
+  ],
+};
+
+const DeleteSubmoduleRequest$json = const {
+  '1': 'DeleteSubmoduleRequest',
+  '2': const [
     const {'1': 'uuid', '3': 1, '4': 1, '5': 9, '10': 'uuid'},
+    const {'1': 'submodule', '3': 2, '4': 1, '5': 11, '6': '.orders.Submodule', '10': 'submodule'},
+  ],
+};
+
+const DeleteSubmoduleResponse$json = const {
+  '1': 'DeleteSubmoduleResponse',
+  '2': const [
+    const {'1': 'status', '3': 1, '4': 1, '5': 8, '10': 'status'},
   ],
 };
 
@@ -226,7 +264,22 @@ const UpdateOrderStatusRequest$json = const {
 const UpdateOrderStatusResponse$json = const {
   '1': 'UpdateOrderStatusResponse',
   '2': const [
+    const {'1': 'status', '3': 1, '4': 1, '5': 8, '10': 'status'},
+  ],
+};
+
+const UpdateOrderQtyRequest$json = const {
+  '1': 'UpdateOrderQtyRequest',
+  '2': const [
     const {'1': 'uuid', '3': 1, '4': 1, '5': 9, '10': 'uuid'},
+    const {'1': 'qty', '3': 2, '4': 1, '5': 11, '6': '.orders.DecimalValue', '10': 'qty'},
+  ],
+};
+
+const UpdateOrderQtyResponse$json = const {
+  '1': 'UpdateOrderQtyResponse',
+  '2': const [
+    const {'1': 'status', '3': 1, '4': 1, '5': 8, '10': 'status'},
   ],
 };
 
