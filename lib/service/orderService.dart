@@ -77,7 +77,7 @@ class OrderService {
   //-Create Order------------------------------------------------------------------------
   Future<CreateOrderResponse> createOrder({
     String tenantId, String sourceId, String sourceTrackingId, String sourceBatch,
-    String pluId, String pluText, dynamic qty, String status, String uuId, String orderType,
+    String pluId, String pluText, DecimalValue qty, String status, String uuId, String orderType,
     String parentUuid, Tags tags, Submodules submodules
   }) async {
     try {
@@ -89,7 +89,7 @@ class OrderService {
           ..sourceBatch = sourceBatch ?? ""
           ..pluId = pluId ?? ""
           ..pluText = pluText ?? ""
-          ..qty = qty ?? 0.0
+          ..qty = qty
           ..status = status ?? ""
           ..uuid = uuId ?? ""
           ..orderType = orderType ?? ""
@@ -318,8 +318,8 @@ class OrderService {
         yield streamOrder;
       }
     } catch (e) {
-      print(e.toString());
-      throw Exception(e.toString());
+      //print(e.toString());
+      throw Exception(e);
     }
   }
 }

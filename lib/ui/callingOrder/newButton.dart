@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:qms_device/bloc/blocSetting.dart';
+import 'package:fixnum/fixnum.dart';
 import 'package:qms_device/library/libSizeConfig.dart';
 import 'package:qms_device/model/fontSize.dart';
 import 'package:qms_device/model/setting.dart';
 import 'package:qms_device/model/sourceBatch.dart';
+import 'package:qms_device/protos/orders.pb.dart';
 import 'package:qms_device/service/orderService.dart';
 
 
@@ -53,7 +55,13 @@ class NewButton extends StatelessWidget {
                     uuId: data.uuid,
                     sourceBatch: (!snapSource.hasData)
                       ? '1'
-                      : '${snapSource.data.sourceBatch+1}'
+                      : '${snapSource.data.sourceBatch+1}',
+                    sourceTrackingId: 'QMS',
+                    pluId: 'QMS',
+                    pluText: 'QMS',
+                    qty: DecimalValue()
+                      ..units = Int64(2)
+                      ..nanos = 1
                   ).then((data){
                     if(data.status){
                       if(!snapSource.hasData){
