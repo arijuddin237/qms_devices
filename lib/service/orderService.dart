@@ -77,29 +77,32 @@ class OrderService {
   //-Create Order------------------------------------------------------------------------
   Future<CreateOrderResponse> createOrder({
     String tenantId, String sourceId, String sourceTrackingId, String sourceBatch,
-    String pluId, String pluText, DecimalValue qty, String status, String uuId, String orderType,
+    String pluId, String pluText, DecimalValue qty, String status, String orderType,
     String parentUuid, Tags tags, Submodules submodules
   }) async {
     try {
-      final resCreateOrder = _client.createOrder(
-        Order()
-          ..tenantId = tenantId ?? ""
-          ..sourceId = sourceId ?? ""
-          ..sourceTrackingId = sourceTrackingId ?? ""
-          ..sourceBatch = sourceBatch ?? ""
-          ..pluId = pluId ?? ""
-          ..pluText = pluText ?? ""
-          ..qty = qty
-          ..status = status ?? ""
-          ..uuid = uuId ?? ""
-          ..orderType = orderType ?? ""
-          ..parentUuid = parentUuid ?? ""
-          ..tags = tags ?? _tagsValue
-          ..submodules = submodules ?? _submValue
-      );
-      return resCreateOrder;
+      final response = await createUuid(sourceId: sourceId).then((data){
+        final resCreateOrder = _client.createOrder(
+          Order()
+            ..tenantId = tenantId
+            ..sourceId = sourceId
+            ..sourceTrackingId = sourceTrackingId
+            ..sourceBatch = sourceBatch
+            ..pluId = pluId
+            ..pluText = pluText
+            ..qty = qty
+            ..status = status ?? ""
+            ..uuid = data.uuid
+            ..orderType = orderType ?? ""
+            ..parentUuid = parentUuid ?? ""
+            ..tags = tags
+            ..submodules = submodules
+        );
+        return resCreateOrder;
+      });
+      return response;
     } catch (e) {
-      throw Exception(e.toString());
+      throw Exception(e);
     }
   }
 
