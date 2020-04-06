@@ -46,66 +46,30 @@ class NewButton extends StatelessWidget {
                 ),
               ),
               onPressed: (){
-                OrderService().createUuid(
-                  sourceId: 'POS01'
-                ).then((data){
-                  OrderService().createOrder(
-                    tenantId: snapshotSetting.data.tenantId,
-                    sourceId: 'POS01',
-                    uuId: data.uuid,
-                    sourceBatch: (!snapSource.hasData)
-                      ? '1'
-                      : '${snapSource.data.sourceBatch+1}',
+                OrderService().createOrder(
+                  tenantId: snapshotSetting.data.tenantId,
+                  sourceId: 'POS01',
+                  sourceBatch: (!snapSource.hasData)
+                    ? '1'
+                    : '${snapSource.data.sourceBatch+1}',
                     sourceTrackingId: 'QMS',
                     pluId: 'QMS',
                     pluText: 'QMS',
                     qty: DecimalValue()
-                      ..units = Int64(2)
-                      ..nanos = 1
-                  ).then((data){
-                    if(data.status){
-                      if(!snapSource.hasData){
-                        blocSetting.addSourceBatch(
-                          sourceBatch: SourceBatch(
-                            sourceBatch: 1,
-                            tenantId: snapshotSetting.data.tenantId
-                          ),
-                          exist: false
-                        );
-                      } else {
-                        blocSetting.addSourceBatch(
-                          sourceBatch: SourceBatch(
-                            sourceBatch: snapSource.data.sourceBatch+1,
-                            tenantId: snapshotSetting.data.tenantId
-                          ),
-                          exist: true
-                        );
-                      }
-                    }
-                  }).catchError((e){
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context){
-                        return AlertDialog(
-                          content: Text('Error Create New Ticket : '+e.toString()),
-                          actions: <Widget>[
-                            FlatButton(
-                              child: Text('Close'),
-                              onPressed: (){
-                                Navigator.pop(context);
-                              },
-                            )
-                          ],
-                        );
-                      }
-                    );
-                  });
+                      ..units = Int64(0)
+                      ..nanos = 0,
+                    status: 'new',
+                    tags: Tags(),
+                    submodules: Submodules()
+                ).then((data){
+                  print(data.status);
                 }).catchError((e){
                   showDialog(
                     context: context,
                     builder: (BuildContext context){
                       return AlertDialog(
-                        content: Text('Error Create New Ticket : '+e.toString()),
+                        title: Text('Error'),
+                        content: Text(e.message.message.toString()),
                         actions: <Widget>[
                           FlatButton(
                             child: Text('Close'),
