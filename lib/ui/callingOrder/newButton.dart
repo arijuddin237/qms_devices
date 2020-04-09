@@ -62,7 +62,25 @@ class NewButton extends StatelessWidget {
                     tags: Tags(),
                     submodules: Submodules()
                 ).then((data){
-                  print(data.status);
+                  if(data.status){
+                    if(!snapSource.hasData){
+                      blocSetting.addSourceBatch(
+                        sourceBatch: SourceBatch(
+                          sourceBatch: 1,
+                          tenantId: snapshotSetting.data.tenantId
+                        ),
+                        exist: false
+                      );
+                    } else {
+                      blocSetting.addSourceBatch(
+                        sourceBatch: SourceBatch(
+                          sourceBatch: snapSource.data.sourceBatch+1,
+                          tenantId: snapshotSetting.data.tenantId
+                        ),
+                        exist: true
+                      );
+                    }
+                  }
                 }).catchError((e){
                   showDialog(
                     context: context,
