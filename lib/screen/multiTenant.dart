@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:qms_device/bloc/blocFontSize.dart';
 import 'package:qms_device/bloc/blocOrder.dart';
@@ -8,6 +11,7 @@ import 'package:qms_device/model/fontSize.dart';
 import 'package:qms_device/model/setting.dart';
 import 'package:qms_device/protos/orders.pb.dart';
 import 'package:qms_device/service/orderService.dart';
+import 'package:qms_device/ui/customDialog.dart';
 import 'package:qms_device/ui/nowServingContainer.dart';
 import 'package:qms_device/ui/scrollingText.dart';
 import 'package:qms_device/ui/tenantGridViewContainer.dart';
@@ -21,6 +25,8 @@ class MultiTenant extends StatefulWidget {
 
 class _MultiTenantState extends State<MultiTenant> {
   OrderService _service = OrderService();
+  Connectivity _connectivity = Connectivity();
+  StreamSubscription<ConnectivityResult> _connectivitySubscription;
   String _pathAssetDefaultContainerColor = 'assets/defaultContainerColor.png';
   String _pathAssetDefaultBackgroundImage = 'assets/defaultBackgroundImage.png';
   String _pathAssetDefaultFontColor = 'assets/defaultFontColor.png';
@@ -347,9 +353,23 @@ class _MultiTenantState extends State<MultiTenant> {
     );
   }
 
+  void _handlerTapEvent() async {
+    Navigator.replace(context,
+      oldRoute: MaterialPageRoute(
+        builder: (context) => MultiTenant()
+      ),
+      newRoute: MaterialPageRoute(
+        builder: (context) => MultiTenant()
+      )
+    );
+  }
+
   @override
   void initState() {
     blocOrders.clearBloc();
+    _connectivitySubscription = _connectivity.onConnectivityChanged.listen((result){
+      print(result.toString());
+    });
     super.initState();
   }
 
@@ -359,7 +379,17 @@ class _MultiTenantState extends State<MultiTenant> {
       body: SafeArea(
         child: StreamBuilder(
           stream: _service.streamOrder().handleError((e){
-            print(e.toString());
+            Future.delayed(const Duration(seconds: 30), _handlerTapEvent);
+            showDialog(
+              context: context,
+              builder: (BuildContext context){
+                return CustomDialog(
+                  title: "Error",
+                  content: e.message.message,
+                );
+              }
+            );
+            
           }),
           builder: (context, snapshot) {
             if(!snapshot.hasData){

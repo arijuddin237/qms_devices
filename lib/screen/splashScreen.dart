@@ -10,7 +10,9 @@ import 'package:qms_device/model/setting.dart';
 import 'package:qms_device/library/libSizeConfig.dart';
 import 'package:qms_device/library/libApps.dart';
 import 'package:qms_device/screen/homeScreen.dart';
+import 'package:qms_device/screen/testScreen.dart';
 import 'package:qms_device/service/orderService.dart';
+import 'package:qms_device/service/orderService2.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -21,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _handlerTapEvent() async {
     Navigator.pushReplacement(context, 
-      MaterialPageRoute(builder: (context) => HomeScreen()));
+      MaterialPageRoute(builder: (context) => TestScreen()));
   }
 
   void _getPath() async {
@@ -44,6 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
         )
       );
       OrderService().initialize();
+      OrderService2().initialize();
     });
   }
 

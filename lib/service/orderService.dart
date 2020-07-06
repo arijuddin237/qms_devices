@@ -37,7 +37,8 @@ class OrderService {
         credentials: ChannelCredentials.secure(
           certificates: _certAsList,
           onBadCertificate: _onBadHandler
-        )
+        ),
+        idleTimeout: Duration(minutes: 1)
       );
 
       _channel = ClientChannel(
@@ -321,7 +322,6 @@ class OrderService {
         yield streamOrder;
       }
     } catch (e) {
-      //print(e.toString());
       throw Exception(e);
     }
   }
